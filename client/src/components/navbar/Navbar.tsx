@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import { PageEnum } from '../../types/enums';
+import NavItem from './nav-item/NavItem';
 
 function Navbar() {
   return (
@@ -18,9 +18,7 @@ function Navbar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav ms-auto p-4 p-lg-0">
-          <Link to={PageEnum.Home} className="nav-item nav-link active">
-            Home
-          </Link>
+          <NavItem to={PageEnum.Home} text="Home" />
           <a href="about.html" className="nav-item nav-link">
             About
           </a>
@@ -59,9 +57,7 @@ function Navbar() {
               </a>
             </div>
           </div>
-          <Link to={PageEnum.Contact} className="nav-item nav-link">
-            Contact
-          </Link>
+          <NavItem to={PageEnum.Contact} text="Contact" />
         </div>
         <a
           href=""
