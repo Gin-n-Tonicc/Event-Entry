@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -63,7 +62,6 @@ public class User implements UserDetails {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
-
 
     @NotNull
     @Enumerated(EnumType.STRING)
