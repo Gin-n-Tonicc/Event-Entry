@@ -1,9 +1,9 @@
-package com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry;
+package com.ginAndTonic.LudogorieHackEnter2024.services.impl.security;
 
 
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.services.UserService;
-import com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.event.OnRegistrationCompleteEvent;
+import com.ginAndTonic.LudogorieHackEnter2024.services.impl.event.OnRegistrationCompleteEvent;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

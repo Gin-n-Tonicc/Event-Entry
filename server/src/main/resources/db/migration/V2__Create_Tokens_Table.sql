@@ -1,6 +1,6 @@
 CREATE TABLE tokens
 (
-    id        INT PRIMARY KEY AUTO_INCREMENT,
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
     token     VARCHAR(255) UNIQUE,
     tokenType ENUM('ACCESS', 'REFRESH') NOT NULL,
     revoked   BOOLEAN NOT NULL,

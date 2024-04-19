@@ -14,8 +14,8 @@ import com.ginAndTonic.LudogorieHackEnter2024.model.entity.VerificationToken;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.VerificationTokenRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.AuthenticationService;
-import com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.event.OnPasswordResetRequestEvent;
-import com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.event.OnRegistrationCompleteEvent;
+import com.ginAndTonic.LudogorieHackEnter2024.services.impl.event.OnPasswordResetRequestEvent;
+import com.ginAndTonic.LudogorieHackEnter2024.services.impl.event.OnRegistrationCompleteEvent;
 import com.ginAndTonic.LudogorieHackEnter2024.util.CookieHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,8 +32,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
-import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
-import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.TokenServiceImpl.AUTH_COOKIE_KEY_REFRESH;
+import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.security.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
+import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.security.TokenServiceImpl.AUTH_COOKIE_KEY_REFRESH;
+
 
 /**
  * Controller class for handling authentication-related operations.

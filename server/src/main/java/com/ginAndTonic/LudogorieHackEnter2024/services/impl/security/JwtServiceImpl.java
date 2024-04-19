@@ -1,4 +1,4 @@
-package com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry;
+package com.ginAndTonic.LudogorieHackEnter2024.services.impl.security;
 
 import com.ginAndTonic.LudogorieHackEnter2024.services.JwtService;
 import io.jsonwebtoken.Claims;
