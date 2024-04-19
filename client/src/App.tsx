@@ -4,6 +4,7 @@ import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
 import ContactUs from './pages/contact-us/ContactUs';
 import Home from './pages/home/Home';
+import NotFound from './pages/not-found/NotFound';
 import './scss/bootstrap.scss';
 import { PageEnum } from './types/enums';
 
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path={PageEnum.Home} element={<Home />} />
         <Route path={PageEnum.Contact} element={<ContactUs />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
 
