@@ -1,0 +1,61 @@
+server:
+  frontend:
+    baseUrl: ${FRONTEND_URL}
+    loginUrl: ${server.frontend.baseUrl}/login
+    finishRegisterUrl: ${server.frontend.baseUrl}/finish-register
+    forgottenPasswordUrl: ${server.frontend.baseUrl}/forgotten-password
+  backend:
+    baseUrl: ${BACKEND_URL}
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  datasource:
+    url: jdbc:${MYSQL_URL}
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET}
+      expiration: ${JWT_EXPIRATION} # a day
+      refresh-token:
+        expiration: ${REFRESH_TOKEN_EXPIRATION} # 7 days
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - https://www.googleapis.com/auth/userinfo.email
+              - https://www.googleapis.com/auth/userinfo.profile
+    mail:
+      host: smtp.gmail.com
+      port: 465
+      protocol: smtps
+      username: ${GMAIL_USERNAME}
+      password: ${GMAIL_PASSWORD}
+      properties:
+        mail:
+          transport:
+            protocol: smtps
+          smtps:
+            auth: true
+            starttls:
+              enable: true
+            timeout: 8000
+application:
+upload:
+  directory: server/src/main/resources/static/uploads/
