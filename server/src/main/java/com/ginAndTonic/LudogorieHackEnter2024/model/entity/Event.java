@@ -40,6 +40,10 @@ public class Event {
     @JoinColumn(name = "user_id")
     private User ownerId;
 
+    @ManyToOne
+    @JoinColumn(name = "file_id")
+    private File picture;
+
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
 }
