@@ -13,6 +13,7 @@ import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserEventStatusReposi
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.UserEventStatusService;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,27 +54,32 @@ public class UserEventStatusServiceImpl implements UserEventStatusService {
 
     @Override
     public UserEventStatusDTO createUserEventStatus(UserEventStatusDTO userEventStatus, PublicUserDTO loggedUser) {
-        Event event = eventRepository.findById(userEventStatus.getEventId())
-                .orElseThrow(EventNotFoundException::new);
+        try {
+            Event event = eventRepository.findById(userEventStatus.getEventId())
+                    .orElseThrow(EventNotFoundException::new);
 
-        LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = LocalDateTime.now();
 
-        if ((event.getStartTime().isBefore(now) || event.getStartTime().isEqual(now)) &&
-                (event.getEndTime().isAfter(now) || event.getEndTime().isEqual(now)) ||
-                (event.getEndTime().isBefore(now) && event.getStartTime().isBefore(now))) {
-            UserEventStatus newUserEventStatus = new UserEventStatus();
-            User user = userRepository.findById(userEventStatus.getUserId()).orElseThrow(UserNotFoundException::new);
+            if ((event.getStartTime().isBefore(now) || event.getStartTime().isEqual(now)) &&
+                    (event.getEndTime().isAfter(now) || event.getEndTime().isEqual(now)) ||
+                    (event.getEndTime().isBefore(now) && event.getStartTime().isBefore(now))) {
+                UserEventStatus newUserEventStatus = new UserEventStatus();
+                User user = userRepository.findById(userEventStatus.getUserId()).orElseThrow(UserNotFoundException::new);
 
-            newUserEventStatus.setUserId(user);
-            newUserEventStatus.setEventId(event);
+                newUserEventStatus.setUserId(user);
+                newUserEventStatus.setEventId(event);
 
-            newUserEventStatus = userEventStatusRepository.save(newUserEventStatus);
+                newUserEventStatus = userEventStatusRepository.save(newUserEventStatus);
 
-            return modelMapper.map(newUserEventStatus, UserEventStatusDTO.class);
-        } else {
+                return modelMapper.map(newUserEventStatus, UserEventStatusDTO.class);
+            } else {
+                throw new UserEventStatusCreateException();
+            }
+        } catch (DataIntegrityViolationException ex) {
             throw new UserEventStatusCreateException();
         }
     }
+
     @Override
     public List<UserEventStatusDTO> getUserEventStatusesByUserId(Long userId) {
         List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(userId);
