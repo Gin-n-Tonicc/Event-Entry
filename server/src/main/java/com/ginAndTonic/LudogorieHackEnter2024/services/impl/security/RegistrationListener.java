@@ -45,12 +45,12 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
         // Construct the email message
         String message = "Dear, " + user.getFirstname() + "\n\n"
-                + "Thank you for registering with Cool School!\n\n"
+                + "Thank you for registering!\n\n"
                 + "To complete your registration, please click the following link to verify your email:\n"
                 + confirmationUrl + "\n"
                 + "If you did not create an account with us, please ignore this email.\n"
                 + "Best regards,\n"
-                + "Cool School Team!";
+                + "Hackaton Team!";
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);

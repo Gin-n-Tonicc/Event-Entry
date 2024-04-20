@@ -15,7 +15,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -75,6 +77,22 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled;
     private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_skills",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_looking_for_skills",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> lookingForSkills = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
