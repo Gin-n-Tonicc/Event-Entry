@@ -39,8 +39,11 @@ function App() {
                   <Route path={PageEnum.Register} element={<Register />} />
                 </Route>
 
-                {/* Only users */}
-                <Route element={<ProtectedRoute role={RoleEnum.USER} />}>
+                {/* Only logged users */}
+                <Route
+                  element={
+                    <ProtectedRoute role={RoleEnum.USER} onlyAuth={true} />
+                  }>
                   <Route path={PageEnum.Logout} element={<Logout />} />
                 </Route>
 

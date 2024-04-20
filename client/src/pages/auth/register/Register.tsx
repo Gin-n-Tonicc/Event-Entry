@@ -4,14 +4,14 @@ import { MultiValue } from 'react-select';
 import { CachePolicies, useFetch } from 'use-http';
 import FormErrorWrapper from '../../../components/form-error-wrapper/FormErrorWrapper';
 import FormInput from '../../../components/form-input/FormInput';
+import SkillsSelect, {
+  SkillOption,
+} from '../../../components/skills-select/SkillsSelect';
 import { authPaths, skillsPaths } from '../../../config/api';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import useValidators from '../../../hooks/useValidator';
 import { AlertTypeEnum, IAuthResponse, ISkill, RoleEnum } from '../../../types';
 import './Register.scss';
-import RegisterSkillsSelect, {
-  SkillOption,
-} from './register-skills-select/RegisterSkillsSelect';
 
 type Inputs = {
   'First Name': string;
@@ -64,7 +64,7 @@ function Register() {
 
   const formValues = watch();
 
-  const { data: skills, loading: loadingSkills } = useFetch<ISkill[]>(
+  const { data: skills } = useFetch<ISkill[]>(
     skillsPaths.getAll,
     {
       cachePolicy: CachePolicies.CACHE_AND_NETWORK,
@@ -104,8 +104,12 @@ function Register() {
       address: data.Address.trim(),
       email: data.Email.trim(),
       password: data.Password.trim(),
-      skills: data.skillsHave.map((x) => skills?.[Number(x.value)]),
-      lookingForSkills: data.skillsNeed.map((x) => skills?.[Number(x.value)]),
+      skills: data.skillsHave.map((x) =>
+        skills?.find((y) => y.id === Number(x.value))
+      ),
+      lookingForSkills: data.skillsNeed.map((x) =>
+        skills?.find((y) => y.id === Number(x.value))
+      ),
       whatCanHelpWith: data.WICHW.trim(),
       role: data.role,
     };
@@ -268,14 +272,14 @@ function Register() {
               />
 
               <FormErrorWrapper message={undefined}>
-                <RegisterSkillsSelect
+                <SkillsSelect
                   options={skillsAsSelectOptions}
                   placeholder={'Select what skills you HAVE...'}
                   onChange={onSkillsHaveChange}
                 />
               </FormErrorWrapper>
               <FormErrorWrapper message={undefined}>
-                <RegisterSkillsSelect
+                <SkillsSelect
                   options={skillsAsSelectOptions}
                   placeholder={'Select what skills you NEED...'}
                   onChange={onSkillsNeedChange}

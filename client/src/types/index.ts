@@ -7,6 +7,7 @@ export * from './enums/RoleEnum';
 // - common
 export * from './interfaces/common/IDefaultObject';
 export * from './interfaces/common/IError';
+export * from './interfaces/common/IFile';
 export * from './interfaces/common/IObjectWithId';
 // - auth
 export * from './interfaces/auth/IAuthRefreshResponse';

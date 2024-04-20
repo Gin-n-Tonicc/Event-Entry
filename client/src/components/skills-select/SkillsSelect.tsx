@@ -5,13 +5,13 @@ export interface SkillOption {
   readonly label: string;
 }
 
-interface RegisterSkillsSelectProps {
+interface SkillsSelectProps {
   options: SkillOption[];
   placeholder: string;
   onChange: (v: MultiValue<SkillOption>) => void;
 }
 
-function RegisterSkillsSelect(props: RegisterSkillsSelectProps) {
+function SkillsSelect(props: SkillsSelectProps) {
   return (
     <div className="form-floating">
       <Select
@@ -29,4 +29,4 @@ function RegisterSkillsSelect(props: RegisterSkillsSelectProps) {
   );
 }
 
-export default RegisterSkillsSelect;
+export default SkillsSelect;

@@ -69,7 +69,7 @@ public class SecurityConfiguration {
                         "/webjars/**",
                         "/swagger-ui.html",
                         "/oauth/**",
-                        "api/v1/skills/all"
+                        "/api/v1/skills/all"
                 )
                 .permitAll()
 

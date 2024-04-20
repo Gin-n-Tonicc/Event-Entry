@@ -5,11 +5,15 @@ import { PageEnum, RoleEnum } from '../../../types';
 
 type ProtectedRouteProps = {
   role: RoleEnum | null;
+  onlyAuth?: boolean;
 };
 
 // The component that protects a route based on the user data
 // whether he is logged or not, whether he is a teacher or not, etc.
-export default function ProtectedRoute({ role }: ProtectedRouteProps) {
+export default function ProtectedRoute({
+  role,
+  onlyAuth,
+}: ProtectedRouteProps) {
   const { user, isOrganisation, isAuthenticated } = useAuthContext();
   const { pathname } = useLocation();
 
@@ -25,8 +29,14 @@ export default function ProtectedRoute({ role }: ProtectedRouteProps) {
     [pathname]
   );
 
+  if (user.role === RoleEnum.ADMIN) {
+    return <Outlet />;
+  }
+
   const passThrough =
-    (!role && role == user.role) || (role === user.role && isAuthenticated);
+    (!role && role == user.role) ||
+    (role === user.role && isAuthenticated) ||
+    (onlyAuth && isAuthenticated);
 
   if (!user.role && !passThrough && pathname !== PageEnum.Logout) {
     return <Navigate to={generateNavPath(PageEnum.Login)} />;

@@ -1,5 +1,6 @@
 package com.ginAndTonic.LudogorieHackEnter2024.model.dto.common;
 
+import com.ginAndTonic.LudogorieHackEnter2024.model.entity.File;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,8 @@ public class EventDTO {
     private String description;
 
     private String address;
+
+    private File picture;
 
     private LocalDateTime startTime;
 

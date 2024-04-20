@@ -19,17 +19,7 @@ function Login() {
   const { loginUser } = useAuthContext();
   const navigate = useNavigate();
 
-  const {
-    handleSubmit,
-    control,
-    register,
-    reset,
-    watch,
-    setError,
-    clearErrors,
-    setValue,
-    formState: { errors },
-  } = useForm<Inputs>({
+  const { handleSubmit, control, reset } = useForm<Inputs>({
     defaultValues: {
       Email: '',
       Password: '',

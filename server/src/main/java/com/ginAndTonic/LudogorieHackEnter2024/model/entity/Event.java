@@ -52,7 +52,7 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
-    private List<Skill> lookingForSkills = new ArrayList<>();
+    private List<Skill> skills = new ArrayList<>();
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
