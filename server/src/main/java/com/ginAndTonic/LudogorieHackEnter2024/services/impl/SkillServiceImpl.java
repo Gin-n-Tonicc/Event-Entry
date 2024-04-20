@@ -1,8 +1,11 @@
 package com.ginAndTonic.LudogorieHackEnter2024.services.impl;
 
 
+import com.ginAndTonic.LudogorieHackEnter2024.enums.Role;
+import com.ginAndTonic.LudogorieHackEnter2024.exceptions.AccessDeniedException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.skill.SkillCreateException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.skill.SkillNotFoundException;
+import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.SkillDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.Skill;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.SkillRepository;
@@ -43,7 +46,11 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public SkillDTO createSkill(SkillDTO skillDTO) {
+    public SkillDTO createSkill(SkillDTO skillDTO, PublicUserDTO publicUserDTO) {
+        if (publicUserDTO.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException();
+        }
+
         try {
             skillDTO.setId(null);
             Skill skillEntity = skillRepository.save(modelMapper.map(skillDTO, Skill.class));
@@ -55,8 +62,12 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public SkillDTO updateSkill(Long id, SkillDTO skillDTO) {
+    public SkillDTO updateSkill(Long id, SkillDTO skillDTO, PublicUserDTO publicUserDTO) {
         Optional<Skill> existingSkillOptional = skillRepository.findByIdAndDeletedFalse(id);
+
+        if (publicUserDTO.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException();
+        }
 
         if (existingSkillOptional.isEmpty()) {
             throw new SkillNotFoundException();
@@ -71,7 +82,11 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public void deleteSkill(Long id) {
+    public void deleteSkill(Long id, PublicUserDTO publicUserDTO) {
+        if (publicUserDTO.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException();
+        }
+
         Optional<Skill> skill = skillRepository.findByIdAndDeletedFalse(id);
         if (skill.isPresent()) {
             // Soft delete

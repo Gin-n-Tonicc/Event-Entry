@@ -40,7 +40,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         service.createVerificationToken(user, token);
 
         String recipientAddress = user.getEmail();
-        String subject = "Cool School Registration Confirmation";
+        String subject = "Event Entry Registration Confirmation";
         String confirmationUrl = event.getAppUrl() + "auth/registrationConfirm?token=" + token;
 
         // Construct the email message
@@ -50,7 +50,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
                 + confirmationUrl + "\n"
                 + "If you did not create an account with us, please ignore this email.\n"
                 + "Best regards,\n"
-                + "Hackaton Team!";
+                + "Gin & Tonic Team!";
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);

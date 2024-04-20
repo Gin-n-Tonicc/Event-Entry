@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -43,6 +45,14 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "file_id")
     private File picture;
+
+    @ManyToMany
+    @JoinTable(
+            name = "event_skills",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> lookingForSkills = new ArrayList<>();
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;

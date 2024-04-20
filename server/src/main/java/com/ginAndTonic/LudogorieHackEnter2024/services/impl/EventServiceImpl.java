@@ -7,6 +7,8 @@ import com.ginAndTonic.LudogorieHackEnter2024.exceptions.event.EventNotFoundExce
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.user.UserNotFoundException;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.EventDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.dto.request.EventRequestDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.dto.response.EventResponseDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.Event;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.EventRepository;
@@ -37,45 +39,45 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDTO> getAllEvents() {
+    public List<EventResponseDTO> getAllEvents() {
         List<Event> events = eventRepository.findByDeletedFalse();
-        return events.stream().map(event -> modelMapper.map(event, EventDTO.class)).toList();
+        return events.stream().map(event -> modelMapper.map(event, EventResponseDTO.class)).toList();
     }
 
     @Override
-    public EventDTO getEventById(Long id) {
+    public EventResponseDTO getEventById(Long id) {
         Optional<Event> event = eventRepository.findByIdAndDeletedFalse(id);
         if (event.isPresent()) {
-            return modelMapper.map(event.get(), EventDTO.class);
+            return modelMapper.map(event.get(), EventResponseDTO.class);
         }
         throw new EventNotFoundException();
     }
 
     @Override
-    public EventDTO createEvent(EventDTO eventDTO, PublicUserDTO loggedUser) {
+    public EventResponseDTO createEvent(EventRequestDTO eventRequestDTO, PublicUserDTO loggedUser) {
         if (loggedUser == null || loggedUser.getRole() == Role.USER) {
             throw new AccessDeniedException();
         }
 
-        LocalDateTime startDatetime = eventDTO.getStartTime();
-        LocalDateTime endDatetime = eventDTO.getEndTime();
+        LocalDateTime startDatetime = eventRequestDTO.getStartTime();
+        LocalDateTime endDatetime = eventRequestDTO.getEndTime();
 
         if (startDatetime == null || endDatetime == null || startDatetime.isAfter(endDatetime)) {
             throw new EventIncorrectDateException();
         }
 
-        eventDTO.setId(null);
-        Event eventEntity = eventRepository.save(modelMapper.map(eventDTO, Event.class));
+        eventRequestDTO.setId(null);
+        Event eventEntity = eventRepository.save(modelMapper.map(eventRequestDTO, Event.class));
 
         Optional<User> user = userRepository.findById(loggedUser.getId());
         eventEntity.setOwnerId(user.orElseThrow(UserNotFoundException::new));
 
-        return modelMapper.map(eventEntity, EventDTO.class);
+        return modelMapper.map(eventEntity, EventResponseDTO.class);
     }
 
 
     @Override
-    public EventDTO updateEvent(Long id, EventDTO eventDTO, PublicUserDTO loggedUser) {
+    public EventResponseDTO updateEvent(Long id, EventDTO eventDTO, PublicUserDTO loggedUser) {
         if (loggedUser == null) {
             throw new AccessDeniedException();
         }
@@ -95,7 +97,7 @@ public class EventServiceImpl implements EventService {
 
         existingEvent.setId(id);
         Event updatedEvent = eventRepository.save(existingEvent);
-        return modelMapper.map(updatedEvent, EventDTO.class);
+        return modelMapper.map(updatedEvent, EventResponseDTO.class);
     }
 
     @Override

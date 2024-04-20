@@ -83,25 +83,6 @@ function Navbar() {
             isOrganisation={isOrganisation}
             hasFinishedOAuth2={hasFinishedOAuth2}
           />
-          {/* <div className="nav-item dropdown">
-            <a
-              href="#"
-              className="nav-link dropdown-toggle"
-              data-bs-toggle="dropdown">
-              Pages
-            </a>
-            <div className="dropdown-menu rounded-0 m-0">
-              <a href="category.html" className="dropdown-item">
-                Job Category
-              </a>
-              <a href="testimonial.html" className="dropdown-item">
-                Testimonial
-              </a>
-              <a href="404.html" className="dropdown-item">
-                404
-              </a>
-            </div>
-          </div> */}
         </div>
       </div>
     </nav>

@@ -2,17 +2,19 @@ package com.ginAndTonic.LudogorieHackEnter2024.services;
 
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.EventDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.dto.request.EventRequestDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.dto.response.EventResponseDTO;
 
 import java.util.List;
 
 public interface EventService {
-    List<EventDTO> getAllEvents();
+    List<EventResponseDTO> getAllEvents();
 
-    EventDTO getEventById(Long id);
+    EventResponseDTO getEventById(Long id);
 
-    EventDTO createEvent(EventDTO categoryDTO, PublicUserDTO loggedUser);
+    EventResponseDTO createEvent(EventRequestDTO categoryDTO, PublicUserDTO loggedUser);
 
-    EventDTO updateEvent(Long id, EventDTO categoryDTO, PublicUserDTO loggedUser);
+    EventResponseDTO updateEvent(Long id, EventDTO categoryDTO, PublicUserDTO loggedUser);
 
     void deleteEvent(Long id);
 }
