@@ -4,6 +4,7 @@ interface NavItemProps {
   text: string;
   to: string;
   dropdown?: boolean;
+  img?: string;
 }
 
 function NavItem(props: NavItemProps) {
@@ -20,7 +21,11 @@ function NavItem(props: NavItemProps) {
 
   return (
     <Link to={props.to} className={classNames}>
-      {props.text}
+      {props.img ? (
+        <img style={{ height: '50px' }} src={props.img} alt={props.text} />
+      ) : (
+        props.text
+      )}
     </Link>
   );
 }

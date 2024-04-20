@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { MultiValue } from 'react-select';
-import { useFetch } from 'use-http';
+import { CachePolicies, useFetch } from 'use-http';
 import FormErrorWrapper from '../../../components/form-error-wrapper/FormErrorWrapper';
 import FormInput from '../../../components/form-input/FormInput';
 import { authPaths, skillsPaths } from '../../../config/api';
@@ -66,6 +66,9 @@ function Register() {
 
   const { data: skills, loading: loadingSkills } = useFetch<ISkill[]>(
     skillsPaths.getAll,
+    {
+      cachePolicy: CachePolicies.CACHE_AND_NETWORK,
+    },
     []
   );
 

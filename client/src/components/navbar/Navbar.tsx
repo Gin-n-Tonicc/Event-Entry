@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { PageEnum, RoleEnum } from '../../types';
+import profileUserIcon from './img/profile-user-icon.png';
 import NavItem from './nav-item/NavItem';
 
 function LoggedNav(props: {
@@ -10,6 +11,7 @@ function LoggedNav(props: {
   return (
     <>
       <NavItem to={PageEnum.Logout} text="Log out" />
+      <NavItem to={PageEnum.Profile} text="Profile" img={profileUserIcon} />
     </>
   );
 }
@@ -44,9 +46,9 @@ function UserNav(props: {
             All Events
           </Link>
           {props.isOrganisation && (
-            <a href="job-detail.html" className="dropdown-item">
+            <Link to={PageEnum.EventsCreate} className="dropdown-item">
               Create Event
-            </a>
+            </Link>
           )}
         </div>
       </div>
@@ -75,7 +77,7 @@ function Navbar() {
         <span className="navbar-toggler-icon" />
       </button>
       <div className="collapse navbar-collapse" id="navbarCollapse">
-        <div className="navbar-nav ms-auto p-4 p-lg-0">
+        <div className="navbar-nav ms-auto p-4 p-lg-0 d-flex justify-content-evenly align-items-center">
           <UserNav
             isAuthenticated={isAuthenticated}
             isOrganisation={isOrganisation}

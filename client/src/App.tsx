@@ -12,6 +12,7 @@ import Login from './pages/auth/login/Login';
 import Logout from './pages/auth/logout/Logout';
 import Register from './pages/auth/register/Register';
 import ContactUs from './pages/contact-us/ContactUs';
+import EventsCreate from './pages/events-create/EventsCreate';
 import Events from './pages/events/Events';
 import Home from './pages/home/Home';
 import NotFound from './pages/not-found/NotFound';
@@ -41,6 +42,15 @@ function App() {
                 {/* Only users */}
                 <Route element={<ProtectedRoute role={RoleEnum.USER} />}>
                   <Route path={PageEnum.Logout} element={<Logout />} />
+                </Route>
+
+                {/* Only organisations */}
+                <Route
+                  element={<ProtectedRoute role={RoleEnum.ORGANISATION} />}>
+                  <Route
+                    path={PageEnum.EventsCreate}
+                    element={<EventsCreate />}
+                  />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
