@@ -31,6 +31,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build with Maven
-        run: mvn -B clean install -Dtest=!controllerTest/** --file pom.xml
+      - name: Build with Maven (skip tests)
+        run: mvn -B clean install --file pom.xml
         working-directory: server
+
