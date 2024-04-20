@@ -6,6 +6,7 @@ import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userFriend.CannotConfir
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userFriend.FriendshipAlreadyExistsException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userFriend.UserFriendNotFoundException;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.entity.Skill;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserFriend;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserFriendRepository;
@@ -14,8 +15,7 @@ import com.ginAndTonic.LudogorieHackEnter2024.services.UserFriendService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserFriendServiceImpl implements UserFriendService {
@@ -74,5 +74,25 @@ public class UserFriendServiceImpl implements UserFriendService {
     @Override
     public List<UserFriend> getFriendsForUser(PublicUserDTO user) {
         return userFriendRepository.findByUserIdAndIsConfirmedIsTrue(user.getId());
+    }
+
+    @Override
+    public List<User> suggestFriendsBySkills(PublicUserDTO loggedInUser) {
+        User user = userRepository.findById(loggedInUser.getId()).orElseThrow(UserNotFoundException::new);
+
+        List<Skill> lookingForSkills = user.getSkills();
+
+        Set<User> potentialFriends = new HashSet<>();
+        for (Skill skill : lookingForSkills) {
+            List<User> usersWithSimilarSkills = userRepository.findBySkills(skill);
+            potentialFriends.addAll(usersWithSimilarSkills);
+        }
+
+        potentialFriends.remove(user);
+
+        List<User> existingFriends = user.getFriendships().stream().map(UserFriend::getFriend).toList();
+        existingFriends.forEach(potentialFriends::remove);
+
+        return new ArrayList<>(potentialFriends);
     }
 }

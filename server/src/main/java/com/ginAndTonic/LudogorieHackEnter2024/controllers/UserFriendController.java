@@ -2,6 +2,7 @@ package com.ginAndTonic.LudogorieHackEnter2024.controllers;
 
 import com.ginAndTonic.LudogorieHackEnter2024.filters.JwtAuthenticationFilter;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserFriend;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.UserFriendService;
@@ -46,5 +47,10 @@ public class UserFriendController {
         PublicUserDTO loggedUser = (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey);
         userFriendService.confirmFriendRequest(loggedUser.getId(), friendId);
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/suggest")
+    public ResponseEntity<List<User>> suggestFriendsBySkills(HttpServletRequest httpServletRequest) {
+        List<User> friends = userFriendService.suggestFriendsBySkills((PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
+        return ResponseEntity.ok(friends);
     }
 }

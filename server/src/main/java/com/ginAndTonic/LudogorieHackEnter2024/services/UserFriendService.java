@@ -1,6 +1,7 @@
 package com.ginAndTonic.LudogorieHackEnter2024.services;
 
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserFriend;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface UserFriendService {
 
     List<UserFriend> getFriendsForUser(PublicUserDTO friendId);
     void confirmFriendRequest(Long loggedUserId, Long friendId);
+    List<User> suggestFriendsBySkills(PublicUserDTO loggedInUser);
 }
