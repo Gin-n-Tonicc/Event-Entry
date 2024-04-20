@@ -8,6 +8,7 @@ type AuthContextType = {
   isAuthenticated: boolean;
   hasFinishedOAuth2: boolean;
   isOrganisation: boolean;
+  isAdmin: boolean;
   updateUser: (v: IUser) => void;
   loginUser: (v: IAuthResponse) => void;
   logoutUser: () => void;
@@ -76,6 +77,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     isAuthenticated && !Boolean(auth.additionalInfoRequired);
 
   const isOrganisation = auth.role === RoleEnum.ORGANISATION;
+  const isAdmin = auth.role === RoleEnum.ADMIN;
 
   return (
     <AuthContext.Provider
@@ -84,6 +86,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         isAuthenticated,
         hasFinishedOAuth2,
         isOrganisation,
+        isAdmin,
         loginUser,
         logoutUser,
         updateUser,
