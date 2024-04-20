@@ -95,7 +95,7 @@ public class AuthenticationController {
                 .orElseThrow(UserNotFoundException::new);
 
         if (!user.isEnabled()) {
-            throw new EmailNotVerified(messageSource);
+            throw new EmailNotVerified();
         }
 
         AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);

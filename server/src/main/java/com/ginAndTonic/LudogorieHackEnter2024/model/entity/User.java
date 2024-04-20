@@ -60,6 +60,7 @@ public class User implements UserDetails {
     @NotNull(message = "The work experience shot not be null!")
     @Size(min = 20, max = 255, message = "The work experience must be between 20 and 255 symbols!")
     private String whatCanHelpWith;
+  
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
