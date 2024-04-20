@@ -76,4 +76,8 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @PostMapping("/like/{eventId}")
+    public ResponseEntity<EventResponseDTO> likeEvent(@PathVariable Long eventId, HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok(eventService.addLike(eventId, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey)));
+    }
 }
