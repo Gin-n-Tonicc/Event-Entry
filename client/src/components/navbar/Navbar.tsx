@@ -1,8 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { PageEnum, RoleEnum } from '../../types';
+import { AdminPageEnum } from '../../types/enums/AdminPageEnum';
 import profileUserIcon from './img/profile-user-icon.png';
 import NavItem from './nav-item/NavItem';
+
+function AdminNav() {
+  return (
+    <ul className="navbar-nav align-items-center">
+      <NavItem text="Users" to={`${PageEnum.Admin}/${AdminPageEnum.USERS}`} />
+      <NavItem text="Skills" to={`${PageEnum.Admin}/${AdminPageEnum.SKILLS}`} />
+    </ul>
+  );
+}
 
 function LoggedNav(props: {
   isOrganisation: boolean;
@@ -29,6 +39,7 @@ function UserNav(props: {
   isAuthenticated: boolean;
   isOrganisation: boolean;
   hasFinishedOAuth2: boolean;
+  isAdmin: boolean;
 }) {
   return (
     <>
@@ -45,11 +56,12 @@ function UserNav(props: {
           <Link to={PageEnum.Events} className="dropdown-item">
             All Events
           </Link>
-          {props.isOrganisation && (
-            <Link to={PageEnum.EventsCreate} className="dropdown-item">
-              Create Event
-            </Link>
-          )}
+          {props.isOrganisation ||
+            (props.isAdmin && (
+              <Link to={PageEnum.EventsCreate} className="dropdown-item">
+                Create Event
+              </Link>
+            ))}
         </div>
       </div>
       {props.isAuthenticated ? <LoggedNav {...props} /> : <GuestNav />}
@@ -58,7 +70,9 @@ function UserNav(props: {
 }
 
 function Navbar() {
-  const { user, isAuthenticated, hasFinishedOAuth2 } = useAuthContext();
+  const { user, isAuthenticated, hasFinishedOAuth2, isAdmin } =
+    useAuthContext();
+  const location = useLocation();
 
   const isOrganisation = RoleEnum.ORGANISATION === user.role;
 
@@ -78,11 +92,16 @@ function Navbar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav ms-auto p-4 p-lg-0 d-flex justify-content-evenly align-items-center">
-          <UserNav
-            isAuthenticated={isAuthenticated}
-            isOrganisation={isOrganisation}
-            hasFinishedOAuth2={hasFinishedOAuth2}
-          />
+          {location.pathname.includes(PageEnum.Admin) ? (
+            <AdminNav />
+          ) : (
+            <UserNav
+              isAuthenticated={isAuthenticated}
+              isOrganisation={isOrganisation}
+              hasFinishedOAuth2={hasFinishedOAuth2}
+              isAdmin={isAdmin}
+            />
+          )}
         </div>
       </div>
     </nav>

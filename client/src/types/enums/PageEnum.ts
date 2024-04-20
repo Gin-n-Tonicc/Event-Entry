@@ -9,4 +9,5 @@ export enum PageEnum {
   Register = '/register',
   Logout = '/logout',
   Profile = '/profile',
+  Admin = '/admin',
 }

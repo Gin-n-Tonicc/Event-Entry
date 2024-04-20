@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import AlertBox from './components/alert-box/AlertBox';
 import ArrowBackToTop from './components/arrow-back-to-top/ArrowBackToTop';
 import Authenticate from './components/auth/authenticate/Authenticate';
@@ -8,6 +8,10 @@ import HttpProvider from './components/http-provider/HttpProvider';
 import Navbar from './components/navbar/Navbar';
 import { AuthProvider } from './contexts/AuthContext';
 import { ErrorProvider } from './contexts/ErrorContext';
+import Admin from './pages/admin/Admin';
+import AdminTableDefault from './pages/admin/admin-tables/AdminTableDefault';
+import AdminTableSkills from './pages/admin/admin-tables/AdminTableSkills';
+import AdminTableUsers from './pages/admin/admin-tables/AdminTableUsers';
 import Login from './pages/auth/login/Login';
 import Logout from './pages/auth/logout/Logout';
 import Register from './pages/auth/register/Register';
@@ -18,6 +22,7 @@ import Home from './pages/home/Home';
 import NotFound from './pages/not-found/NotFound';
 import './scss/styles.scss';
 import { PageEnum, RoleEnum } from './types';
+import { AdminPageEnum } from './types/enums/AdminPageEnum';
 
 function App() {
   return (
@@ -53,6 +58,24 @@ function App() {
                   <Route
                     path={PageEnum.EventsCreate}
                     element={<EventsCreate />}
+                  />
+                </Route>
+
+                {/* Admin does it's own auth check on load */}
+                <Route path={PageEnum.Admin} element={<Admin />}>
+                  <Route index element={<AdminTableDefault />} />
+                  <Route
+                    path={AdminPageEnum.USERS}
+                    element={<AdminTableUsers />}
+                  />
+                  <Route
+                    path={AdminPageEnum.SKILLS}
+                    element={<AdminTableSkills />}
+                  />
+
+                  <Route
+                    path="*"
+                    element={<Navigate to={PageEnum.NotFound} />}
                   />
                 </Route>
 
