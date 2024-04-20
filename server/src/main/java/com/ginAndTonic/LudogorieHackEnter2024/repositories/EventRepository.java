@@ -15,10 +15,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Optional<Event> findByIdAndDeletedFalse(Long id);
 
-    @Query("SELECT e FROM Event e LEFT JOIN e.lookingForSkills s WHERE " +
+    @Query("SELECT e FROM Event e LEFT JOIN e.skills s WHERE " +
             "(LOWER(e.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
             "LOWER(s.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
-            "(:skillId IS NULL OR :skillId IN (SELECT skill.id FROM Skill skill JOIN e.lookingForSkills))")
+            "(:skillId IS NULL OR :skillId IN (SELECT skill.id FROM Skill skill JOIN e.skills))")
     List<Event> searchByNameAndSkill(@Param("searchTerm") String searchTerm, @Param("skillId") Long skillId);
 
     @Query("SELECT e FROM Event e JOIN e.liked_users u WHERE u = :user")
