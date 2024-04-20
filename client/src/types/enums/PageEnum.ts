@@ -5,4 +5,5 @@ export enum PageEnum {
   Events = '/events',
   EventsSingle = '/events/:id',
   Register = '/register',
+  Login = '/login',
 }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PageEnum } from '../../types/enums';
+import { PageEnum } from '../../types';
 
 interface BreadcrumbProps {
   pageName: string;

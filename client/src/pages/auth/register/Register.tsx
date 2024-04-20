@@ -1,12 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { MultiValue } from 'react-select';
-import { CachePolicies, useFetch } from 'use-http';
+import { useFetch } from 'use-http';
 import FormErrorWrapper from '../../../components/form-error-wrapper/FormErrorWrapper';
 import FormInput from '../../../components/form-input/FormInput';
 import { authPaths } from '../../../config/api';
+import { useErrorContext } from '../../../contexts/ErrorContext';
 import useValidators from '../../../hooks/useValidator';
-import { RoleEnum } from '../../../types/enums';
+import { AlertTypeEnum, IAuthResponse, RoleEnum } from '../../../types';
 import './Register.scss';
 import RegisterSkillsSelect, {
   SkillOption,
@@ -30,6 +31,7 @@ type Inputs = {
 
 function Register() {
   const { auth } = useValidators();
+  const { addError } = useErrorContext();
 
   const {
     handleSubmit,
@@ -61,9 +63,10 @@ function Register() {
   });
 
   const formValues = watch();
-  const { post, response, loading } = useFetch<object>(authPaths.register, {
-    cache: CachePolicies.NO_CACHE,
-  });
+
+  const { post, response, loading } = useFetch<IAuthResponse>(
+    authPaths.register
+  );
 
   useEffect(() => {
     const areEqual = formValues.Password === formValues['Repeat Password'];
@@ -88,23 +91,25 @@ function Register() {
       firstname: data['First Name'].trim(),
       lastname: data['Last Name'].trim(),
       currentWorkPlace: data['Current Workplace'].trim(),
-      education: data.Education,
-      workExperience: data.Experience,
-      address: data.Address,
-      email: data.Email,
-      password: data.Password,
+      education: data.Education.trim(),
+      workExperience: data.Experience.trim(),
+      address: data.Address.trim(),
+      email: data.Email.trim(),
+      password: data.Password.trim(),
       skills: data.skillsHave.map((x) => Number(x.value)),
       lookingForSkills: data.skillsNeed.map((x) => Number(x.value)),
-      whatCanHelpWith: data.WICHW,
+      whatCanHelpWith: data.WICHW.trim(),
       role: data.role,
     };
 
-    console.log(body);
-
-    const hello = await post(body);
+    const user = await post(body);
 
     if (response.ok) {
-      console.log(hello);
+      reset();
+      addError(
+        'A confirmation email has been sent to the given email address!',
+        AlertTypeEnum.HEADS_UP
+      );
     }
   };
 
@@ -293,6 +298,7 @@ function Register() {
 
               <div className="d-grid">
                 <button
+                  disabled={loading}
                   className="btn btn-primary btn-login text-uppercase fw-bold"
                   type="submit">
                   Sign in
@@ -301,16 +307,10 @@ function Register() {
               <hr className="my-4" />
               <div className="d-grid mb-2">
                 <button
+                  disabled={loading}
                   className="btn btn-google btn-login text-uppercase fw-bold"
                   type="submit">
                   <i className="fab fa-google me-2" /> Sign in with Google
-                </button>
-              </div>
-              <div className="d-grid">
-                <button
-                  className="btn btn-facebook btn-login text-uppercase fw-bold"
-                  type="submit">
-                  <i className="fab fa-facebook-f me-2" /> Sign in with Facebook
                 </button>
               </div>
             </form>

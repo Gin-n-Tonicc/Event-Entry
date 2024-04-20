@@ -75,7 +75,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     )
             );
         } catch (AuthenticationException exception) {
-            throw new UserLoginException(messageSource);
+            throw new UserLoginException();
         }
 
         User user = userService.findByEmail(request.getEmail());
