@@ -31,4 +31,6 @@ public interface UserService {
     void createVerificationToken(User user, String token);
 
     VerificationToken getVerificationToken(String VerificationToken);
+
+    AdminUserDTO getById(Long userId);
 }

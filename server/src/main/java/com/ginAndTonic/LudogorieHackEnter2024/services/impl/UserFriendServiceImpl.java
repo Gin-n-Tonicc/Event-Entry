@@ -12,6 +12,7 @@ import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserFriend;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserFriendRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.UserFriendService;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,12 @@ public class UserFriendServiceImpl implements UserFriendService {
 
     private final UserFriendRepository userFriendRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public UserFriendServiceImpl(UserFriendRepository userFriendRepository, UserRepository userRepository) {
+    public UserFriendServiceImpl(UserFriendRepository userFriendRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.userFriendRepository = userFriendRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -72,8 +75,15 @@ public class UserFriendServiceImpl implements UserFriendService {
     }
 
     @Override
-    public List<UserFriend> getFriendsForUser(PublicUserDTO user) {
-        return userFriendRepository.findByUserIdAndIsConfirmedIsTrue(user.getId());
+    public List<UserFriend> getFriendRequestsById(Long id) {
+       User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+       return userFriendRepository.findByUserIdAndIsConfirmedIsFalse(user.getId());
+    }
+    @Override
+    public List<UserFriend> getFriendsForUser(Long id) {
+        userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+        return userFriendRepository.findByUserIdAndIsConfirmedIsTrue(id);
     }
 
     @Override

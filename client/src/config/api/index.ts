@@ -5,3 +5,4 @@ export * from './files';
 export * from './oAuth';
 export * from './skills';
 export * from './userEventStatuses';
+export * from './users';

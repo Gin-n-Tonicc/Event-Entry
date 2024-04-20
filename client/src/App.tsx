@@ -21,6 +21,7 @@ import EventsDetails from './pages/events-details/EventsDetails';
 import Events from './pages/events/Events';
 import Home from './pages/home/Home';
 import NotFound from './pages/not-found/NotFound';
+import Profile from './pages/profile/Profile';
 import './scss/styles.scss';
 import { PageEnum, RoleEnum } from './types';
 import { AdminPageEnum } from './types/enums/AdminPageEnum';
@@ -55,6 +56,7 @@ function App() {
                     <ProtectedRoute role={RoleEnum.USER} onlyAuth={true} />
                   }>
                   <Route path={PageEnum.Logout} element={<Logout />} />
+                  <Route path={PageEnum.Profile} element={<Profile />} />
                 </Route>
 
                 {/* Only organisations */}

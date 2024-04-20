@@ -8,6 +8,6 @@ export enum PageEnum {
   Login = '/login',
   Register = '/register',
   Logout = '/logout',
-  Profile = '/profile',
+  Profile = '/profile/:userId',
   Admin = '/admin',
 }

@@ -17,11 +17,9 @@ import java.util.List;
 public class UserFriendController {
 
     private final UserFriendService userFriendService;
-    private final UserRepository userRepository;
 
-    public UserFriendController(UserFriendService userFriendService, UserRepository userRepository) {
+    public UserFriendController(UserFriendService userFriendService) {
         this.userFriendService = userFriendService;
-        this.userRepository = userRepository;
     }
 
     @PostMapping("/add/{friendId}")
@@ -36,9 +34,15 @@ public class UserFriendController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<UserFriend>> getFriends(HttpServletRequest httpServletRequest) {
-        List<UserFriend> friends = userFriendService.getFriendsForUser((PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<List<UserFriend>> getFriends(@PathVariable Long userId) {
+        List<UserFriend> friends = userFriendService.getFriendsForUser(userId);
+        return ResponseEntity.ok(friends);
+    }
+
+    @GetMapping("/requests/{userId}")
+    public ResponseEntity<List<UserFriend>> getFriendsByUserId(@PathVariable Long userId) {
+        List<UserFriend> friends = userFriendService.getFriendRequestsById(userId);
         return ResponseEntity.ok(friends);
     }
 

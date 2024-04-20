@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
     private UserService userService;
 
@@ -26,6 +25,11 @@ public class UserController {
     @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<AdminUserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/byId/{userId}")
+    public ResponseEntity<AdminUserDTO> getUserById(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getById(userId));
     }
 
     @PutMapping("/{id}")
