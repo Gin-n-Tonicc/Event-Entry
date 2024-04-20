@@ -2,6 +2,7 @@ package com.ginAndTonic.LudogorieHackEnter2024.services.impl;
 
 import com.ginAndTonic.LudogorieHackEnter2024.enums.Role;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.AccessDeniedException;
+import com.ginAndTonic.LudogorieHackEnter2024.exceptions.NoSuchElementException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.event.EventIncorrectDateException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.event.EventNotFoundException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.user.UserNotFoundException;
@@ -11,17 +12,22 @@ import com.ginAndTonic.LudogorieHackEnter2024.model.dto.request.EventRequestDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.response.EventResponseDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.Event;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
+import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserEventStatus;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.EventRepository;
+import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserEventStatusRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.EventService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -29,12 +35,15 @@ public class EventServiceImpl implements EventService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+
+    private final UserEventStatusRepository userEventStatusRepository;
     private final MessageSource messageSource;
 
-    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository, ModelMapper modelMapper, MessageSource messageSource) {
+    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository, ModelMapper modelMapper, UserEventStatusRepository userEventStatusRepository, MessageSource messageSource) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.userEventStatusRepository = userEventStatusRepository;
         this.messageSource = messageSource;
     }
 
@@ -119,9 +128,70 @@ public class EventServiceImpl implements EventService {
 
         List<Event> events = eventRepository.searchByNameAndSkill(searchTerm, skillId);
 
-        if(events.isEmpty()){
+        if (events.isEmpty()) {
             events = eventRepository.findByDeletedFalse();
         }
         return events.stream().map(event -> modelMapper.map(event, EventResponseDTO.class)).toList();
+    }
+
+    @Override
+    public EventResponseDTO addLike(Long eventId, PublicUserDTO loggedUser) {
+        // Method to add a like to an event post
+        if (loggedUser != null) {
+            Event event = eventRepository.findById(eventId).orElseThrow(EventNotFoundException::new);
+            User user = userRepository.findByIdAndDeletedFalse(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
+            if (!event.getLiked_users().contains(user)) {
+                event.getLiked_users().add(user);
+                event = eventRepository.save(event);
+                return modelMapper.map(event, EventResponseDTO.class);
+            }
+            event.getLiked_users().remove(user);
+        }
+        throw new AccessDeniedException();
+    }
+
+    @Override
+    public List<EventResponseDTO> filterEventsByCriteria(boolean hasGoneTo, String filterType, PublicUserDTO publicUserDTO, int n) throws ChangeSetPersister.NotFoundException {
+        User user = userRepository.findById(publicUserDTO.getId()).orElseThrow(UserNotFoundException::new);
+        List<Event> resultEvents = new ArrayList<>();
+        if (!hasGoneTo) {
+            if (filterType.equalsIgnoreCase("All")) {
+                resultEvents = eventRepository.findByDeletedFalse();
+            } else if (filterType.equalsIgnoreCase("Will happen")) {
+                resultEvents = eventRepository.findByStartTimeAfterAndDeletedIsFalse(LocalDateTime.now());
+            } else if (filterType.equalsIgnoreCase("Favourited")) {
+                resultEvents = eventRepository.findEventsLikedByUser(user);
+                List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
+                for (UserEventStatus userEventStatus : userEventStatusList) {
+                    for (Event event : resultEvents) {
+                        if (Objects.equals(userEventStatus.getEventId().getId(), event.getId())) {
+                            return null;
+                        }
+                    }
+                }
+            }
+        } else {
+            List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
+            if (filterType.equalsIgnoreCase("All")) {
+                List<UserEventStatus> userEventStatuses = userEventStatusRepository.findByUserIdId(user.getId());
+                for (UserEventStatus userEvent : userEventStatuses) {
+                    Event event = eventRepository.findById(userEvent.getId()).orElseThrow(NoSuchElementException::new);
+                    resultEvents.add(event);
+                }
+            } else if (filterType.equalsIgnoreCase("Favourited")) {
+                List<Event> likedEvents = eventRepository.findEventsLikedByUser(user);
+                for (UserEventStatus userEventStatus : userEventStatusList) {
+                    for (Event likedEvent : likedEvents) {
+                        if (Objects.equals(userEventStatus.getEventId().getId(), likedEvent.getId())) {
+                            resultEvents.add(likedEvent);
+                        }
+                    }
+                }
+            }
+        }
+        return resultEvents.stream()
+                .limit(n) // Limit the stream to first N elements
+                .map(event -> modelMapper.map(event, EventResponseDTO.class))
+                .collect(Collectors.toList());
     }
 }

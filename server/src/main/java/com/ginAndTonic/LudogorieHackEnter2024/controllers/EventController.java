@@ -8,6 +8,7 @@ import com.ginAndTonic.LudogorieHackEnter2024.model.dto.response.EventResponseDT
 import com.ginAndTonic.LudogorieHackEnter2024.services.EventService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +61,18 @@ public class EventController {
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "skillId", required = false) Long skillId) {
         return eventService.searchEvents(name, skillId);
+    }
+    @GetMapping("/events/search")
+    public ResponseEntity<List<EventResponseDTO>> searchEventsByCriteria(
+            @RequestParam(name = "hasGoneTo", required = false, defaultValue = "false") boolean hasGoneTo,
+            @RequestParam(name = "numberEvents", required = false, defaultValue = "5") int n,
+            @RequestParam(name = "filterType", required = false, defaultValue = "All") String filterType,
+            HttpServletRequest httpServletRequest) {
+        try {
+            List<EventResponseDTO> events = eventService.filterEventsByCriteria(hasGoneTo, filterType, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey), n);
+            return ResponseEntity.ok(events);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
