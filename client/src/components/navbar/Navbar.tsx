@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { PageEnum } from '../../types/enums';
 import NavItem from './nav-item/NavItem';
 
@@ -7,7 +8,7 @@ function Navbar() {
       <a
         href="index.html"
         className="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-        <h1 className="m-0 text-primary">JobEntry</h1>
+        <h1 className="m-0 text-primary">EventEntry</h1>
       </a>
       <button
         type="button"
@@ -19,22 +20,20 @@ function Navbar() {
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav ms-auto p-4 p-lg-0">
           <NavItem to={PageEnum.Home} text="Home" />
-          <a href="about.html" className="nav-item nav-link">
-            About
-          </a>
+
           <div className="nav-item dropdown">
             <a
               href="#"
               className="nav-link dropdown-toggle"
               data-bs-toggle="dropdown">
-              Jobs
+              Events
             </a>
             <div className="dropdown-menu rounded-0 m-0">
-              <a href="job-list.html" className="dropdown-item">
-                Job List
-              </a>
+              <Link to={PageEnum.Events} className="dropdown-item">
+                All Events
+              </Link>
               <a href="job-detail.html" className="dropdown-item">
-                Job Detail
+                Create Event
               </a>
             </div>
           </div>
