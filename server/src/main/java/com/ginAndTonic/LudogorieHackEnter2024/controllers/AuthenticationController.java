@@ -14,8 +14,8 @@ import com.ginAndTonic.LudogorieHackEnter2024.model.entity.VerificationToken;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.VerificationTokenRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.AuthenticationService;
-import com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.event.OnPasswordResetRequestEvent;
-import com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.event.OnRegistrationCompleteEvent;
+import com.ginAndTonic.LudogorieHackEnter2024.services.impl.event.OnPasswordResetRequestEvent;
+import com.ginAndTonic.LudogorieHackEnter2024.services.impl.event.OnRegistrationCompleteEvent;
 import com.ginAndTonic.LudogorieHackEnter2024.util.CookieHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,8 +32,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
-import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
-import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.TokenServiceImpl.AUTH_COOKIE_KEY_REFRESH;
+import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.security.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
+import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.security.TokenServiceImpl.AUTH_COOKIE_KEY_REFRESH;
+
 
 /**
  * Controller class for handling authentication-related operations.
@@ -91,7 +92,7 @@ public class AuthenticationController {
     @PostMapping("/authenticate") // login
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse servletResponse) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(messageSource));
+                .orElseThrow(UserNotFoundException::new);
 
         if (!user.isEnabled()) {
             throw new EmailNotVerified(messageSource);
@@ -140,7 +141,7 @@ public class AuthenticationController {
 
     @PostMapping("/forgot-password") // Sends link to email so the user can change their password
     public ResponseEntity<String> forgotPassword(@RequestParam("email") String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(messageSource));
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         eventPublisher.publishEvent(new OnPasswordResetRequestEvent(user, appBaseUrl));
         return ResponseEntity.ok("Password reset link sent to your email!");
     }

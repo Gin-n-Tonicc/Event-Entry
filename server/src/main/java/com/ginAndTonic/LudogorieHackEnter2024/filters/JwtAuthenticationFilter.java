@@ -21,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
+import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.security.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
 
 
 /**
