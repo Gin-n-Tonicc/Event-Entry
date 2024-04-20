@@ -14,6 +14,5 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest extends CompleteOAuthRequest {
     private String email;
     private String password;
-    private String username;
     private Provider provider = Provider.LOCAL;
 }

@@ -19,7 +19,7 @@ public class CompleteOAuthRequest {
     private String education;
     private String currentWorkPlace;
     private String workExperience;
-    private String description;
+    private String whatCanHelpWith;
     private Role role;
     private List<Skill> skills = new ArrayList<>();
     private List<Skill> lookingForSkills = new ArrayList<>();

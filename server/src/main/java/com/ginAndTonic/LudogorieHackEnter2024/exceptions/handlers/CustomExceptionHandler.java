@@ -41,7 +41,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleBadCredentialsExceptions() {
-        return handleApiExceptions(new UserLoginException(getMessageSource()));
+        return handleApiExceptions(new UserLoginException());
     }
 
     @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
