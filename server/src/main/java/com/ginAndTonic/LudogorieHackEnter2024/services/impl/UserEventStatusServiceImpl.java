@@ -4,7 +4,6 @@ import com.ginAndTonic.LudogorieHackEnter2024.exceptions.event.EventNotFoundExce
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.user.UserNotFoundException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userEventStatus.UserEventStatusCreateException;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
-import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.EventDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.UserEventStatusDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.Event;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserEventStatusServiceImpl implements UserEventStatusService {
@@ -37,7 +37,7 @@ public class UserEventStatusServiceImpl implements UserEventStatusService {
     }
 
     @Override
-    public List<UserEventStatusDTO> getAllUserEventStatuses(){
+    public List<UserEventStatusDTO> getAllUserEventStatuses() {
         List<UserEventStatus> userEventStatus = userEventStatusRepository.findAll();
         return userEventStatus.stream().map(event -> modelMapper.map(event, UserEventStatusDTO.class)).toList();
     }
@@ -58,7 +58,9 @@ public class UserEventStatusServiceImpl implements UserEventStatusService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        if (event.getStartTime().isBefore(now) && event.getEndTime().isAfter(now)) {
+        if ((event.getStartTime().isBefore(now) || event.getStartTime().isEqual(now)) &&
+                (event.getEndTime().isAfter(now) || event.getEndTime().isEqual(now)) ||
+                (event.getEndTime().isBefore(now) && event.getStartTime().isBefore(now))) {
             UserEventStatus newUserEventStatus = new UserEventStatus();
             User user = userRepository.findById(userEventStatus.getUserId()).orElseThrow(UserNotFoundException::new);
 
@@ -71,5 +73,20 @@ public class UserEventStatusServiceImpl implements UserEventStatusService {
         } else {
             throw new UserEventStatusCreateException();
         }
+    }
+    @Override
+    public List<UserEventStatusDTO> getUserEventStatusesByUserId(Long userId) {
+        List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(userId);
+        return userEventStatusList.stream()
+                .map(event -> modelMapper.map(event, UserEventStatusDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserEventStatusDTO> getUserEventStatusesByEventId(Long eventId) {
+        List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByEventIdId(eventId);
+        return userEventStatusList.stream()
+                .map(event -> modelMapper.map(event, UserEventStatusDTO.class))
+                .collect(Collectors.toList());
     }
 }

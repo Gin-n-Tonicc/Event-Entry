@@ -11,4 +11,7 @@ public interface UserEventStatusService {
     UserEventStatusDTO getUserEventStatusById(Long id);
 
     UserEventStatusDTO createUserEventStatus(UserEventStatusDTO userEventStatus, PublicUserDTO loggedUser);
+    List<UserEventStatusDTO> getUserEventStatusesByUserId(Long userId);
+
+    List<UserEventStatusDTO> getUserEventStatusesByEventId(Long eventId);
 }

@@ -37,4 +37,14 @@ public class UserEventStatusController {
         UserEventStatusDTO cratedUserEventStatus = userEventStatusService.createUserEventStatus(userEventStatusDTO, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
         return new ResponseEntity<>(cratedUserEventStatus, HttpStatus.CREATED);
     }
+
+    @GetMapping("/by-user")
+    public List<UserEventStatusDTO> getUserEventStatusesByUserId(@RequestParam Long userId) {
+        return userEventStatusService.getUserEventStatusesByUserId(userId);
+    }
+
+    @GetMapping("/by-event")
+    public List<UserEventStatusDTO> getUserEventStatusesByEventId(@RequestParam Long eventId) {
+        return userEventStatusService.getUserEventStatusesByEventId(eventId);
+    }
 }
