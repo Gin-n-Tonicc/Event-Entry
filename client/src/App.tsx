@@ -17,6 +17,7 @@ import Logout from './pages/auth/logout/Logout';
 import Register from './pages/auth/register/Register';
 import ContactUs from './pages/contact-us/ContactUs';
 import EventsCreate from './pages/events-create/EventsCreate';
+import EventsDetails from './pages/events-details/EventsDetails';
 import Events from './pages/events/Events';
 import Home from './pages/home/Home';
 import NotFound from './pages/not-found/NotFound';
@@ -37,6 +38,10 @@ function App() {
                 <Route path={PageEnum.Home} element={<Home />} />
                 <Route path={PageEnum.Contact} element={<ContactUs />} />
                 <Route path={PageEnum.Events} element={<Events />} />
+                <Route
+                  path={PageEnum.EventsDetails}
+                  element={<EventsDetails />}
+                />
 
                 {/* Only guests */}
                 <Route element={<ProtectedRoute role={null} />}>

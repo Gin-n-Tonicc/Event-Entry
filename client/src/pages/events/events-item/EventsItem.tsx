@@ -75,7 +75,7 @@ function EventsItem(props: EventsItemProps) {
 
             <Link
               className="btn btn-primary"
-              to={PageEnum.EventsSingle.replace(':id', props.id.toString())}>
+              to={PageEnum.EventsDetails.replace(':id', props.id.toString())}>
               View
             </Link>
           </div>

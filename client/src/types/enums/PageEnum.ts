@@ -4,7 +4,7 @@ export enum PageEnum {
   NotFound = '/not-found',
   Events = '/events',
   EventsCreate = '/events/create',
-  EventsSingle = '/events/:id',
+  EventsDetails = '/events/:id',
   Login = '/login',
   Register = '/register',
   Logout = '/logout',

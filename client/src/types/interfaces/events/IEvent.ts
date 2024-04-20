@@ -1,6 +1,7 @@
 import { IUser } from '../auth/IUser';
 import { IFile } from '../common/IFile';
 import { IObjectWithId } from '../common/IObjectWithId';
+import { ISkill } from '../skills/ISkill';
 
 export interface IEvent extends IObjectWithId {
   name: string;
@@ -10,4 +11,5 @@ export interface IEvent extends IObjectWithId {
   startTime: Date;
   endTime: Date;
   liked_users: IUser[];
+  skills: ISkill[];
 }
