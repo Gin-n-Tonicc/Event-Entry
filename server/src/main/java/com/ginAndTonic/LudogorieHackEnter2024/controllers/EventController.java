@@ -12,6 +12,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.testng.collections.Lists;
 
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class EventController {
             @RequestParam(name = "skillId", required = false) Long skillId) {
         return eventService.searchEvents(name, skillId);
     }
-    @GetMapping("/events/search")
+    @GetMapping("/filter")
     public ResponseEntity<List<EventResponseDTO>> searchEventsByCriteria(
             @RequestParam(name = "hasGoneTo", required = false, defaultValue = "false") boolean hasGoneTo,
             @RequestParam(name = "numberEvents", required = false, defaultValue = "5") int n,
@@ -70,7 +71,7 @@ public class EventController {
             HttpServletRequest httpServletRequest) {
         try {
             List<EventResponseDTO> events = eventService.filterEventsByCriteria(hasGoneTo, filterType, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey), n);
-            return ResponseEntity.ok(events);
+            return ResponseEntity.ok(Lists.newReversedArrayList(events));
         } catch (ChangeSetPersister.NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
