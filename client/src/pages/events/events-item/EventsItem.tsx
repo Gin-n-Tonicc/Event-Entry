@@ -1,6 +1,7 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { filesPaths } from '../../../config/api';
+import { useFetch } from 'use-http';
+import { eventsPaths, filesPaths } from '../../../config/api';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { PageEnum } from '../../../types';
 import { IEvent } from '../../../types/interfaces/events/IEvent';
@@ -8,9 +9,36 @@ import { IEvent } from '../../../types/interfaces/events/IEvent';
 export interface EventsItemProps extends IEvent {}
 
 function EventsItem(props: EventsItemProps) {
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, user } = useAuthContext();
 
-  const likeHandler: MouseEventHandler<HTMLAnchorElement> = (e) => {};
+  const [hasLiked, setHasLiked] = useState(
+    props.liked_users.some((x) => x.id, user.id)
+  );
+
+  const [peopleInterested, setPeopleInterested] = useState(
+    props.liked_users.length
+  );
+
+  const heartClass = useMemo(() => (hasLiked ? 'fas' : 'far'), [hasLiked]);
+
+  const { post, response, loading } = useFetch(eventsPaths.like(props.id));
+
+  const likeHandler: MouseEventHandler<HTMLAnchorElement> = async () => {
+    if (!isAuthenticated || loading) {
+      return;
+    }
+
+    await post();
+    if (response.ok) {
+      if (hasLiked) {
+        setPeopleInterested((prev) => prev - 1);
+      } else {
+        setPeopleInterested((prev) => prev + 1);
+      }
+
+      setHasLiked((prev) => !prev);
+    }
+  };
 
   return (
     <div className="job-item p-4 mb-4">
@@ -41,7 +69,7 @@ function EventsItem(props: EventsItemProps) {
               <a
                 className="btn btn-light btn-square me-3"
                 onClick={likeHandler}>
-                <i className="far fa-heart text-primary" />
+                <i className={`${heartClass} fa-heart text-primary`} />
               </a>
             )}
 
@@ -51,10 +79,10 @@ function EventsItem(props: EventsItemProps) {
               View
             </Link>
           </div>
-          {/* <small className="text-truncate">
+          <small className="text-truncate">
             <i className="far fa-user text-primary me-2" />
-            People going: {props.peopleRegistered}
-          </small> */}
+            People Interested: {peopleInterested}
+          </small>
         </div>
       </div>
     </div>

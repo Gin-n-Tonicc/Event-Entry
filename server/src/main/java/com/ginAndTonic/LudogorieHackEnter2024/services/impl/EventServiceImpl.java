@@ -49,7 +49,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventResponseDTO> getAllEvents() {
-        List<Event> events = eventRepository.findByDeletedFalse();
+        List<Event> events = eventRepository.findByDeletedFalseOrderByIdDesc();
         return events.stream().map(event -> modelMapper.map(event, EventResponseDTO.class)).toList();
     }
 
@@ -129,7 +129,7 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.searchByNameAndSkill(searchTerm, skillId);
 
         if (events.isEmpty()) {
-            events = eventRepository.findByDeletedFalse();
+            events = eventRepository.findByDeletedFalseOrderByIdDesc();
         }
         return events.stream().map(event -> modelMapper.map(event, EventResponseDTO.class)).toList();
     }
@@ -137,17 +137,21 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventResponseDTO addLike(Long eventId, PublicUserDTO loggedUser) {
         // Method to add a like to an event post
-        if (loggedUser != null) {
-            Event event = eventRepository.findById(eventId).orElseThrow(EventNotFoundException::new);
-            User user = userRepository.findByIdAndDeletedFalse(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
-            if (!event.getLiked_users().contains(user)) {
-                event.getLiked_users().add(user);
-                event = eventRepository.save(event);
-                return modelMapper.map(event, EventResponseDTO.class);
-            }
+        if (loggedUser == null) {
+            throw new AccessDeniedException();
+        }
+
+        Event event = eventRepository.findById(eventId).orElseThrow(EventNotFoundException::new);
+        User user = userRepository.findByIdAndDeletedFalse(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
+
+        if (!event.getLiked_users().contains(user)) {
+            event.getLiked_users().add(user);
+        } else {
             event.getLiked_users().remove(user);
         }
-        throw new AccessDeniedException();
+
+        event = eventRepository.save(event);
+        return modelMapper.map(event, EventResponseDTO.class);
     }
 
     @Override
@@ -156,9 +160,9 @@ public class EventServiceImpl implements EventService {
         List<Event> resultEvents = new ArrayList<>();
         if (!hasGoneTo) {
             if (filterType.equalsIgnoreCase("All")) {
-                resultEvents = eventRepository.findByDeletedFalse();
+                resultEvents = eventRepository.findByDeletedFalseOrderByIdDesc();
             } else if (filterType.equalsIgnoreCase("Will happen")) {
-                resultEvents = eventRepository.findByStartTimeAfterAndDeletedIsFalse(LocalDateTime.now());
+                resultEvents = eventRepository.findByStartTimeAfterAndDeletedIsFalseOrderByIdDesc(LocalDateTime.now());
             } else if (filterType.equalsIgnoreCase("Favourited")) {
                 resultEvents = eventRepository.findEventsLikedByUser(user);
                 List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
@@ -172,6 +176,7 @@ public class EventServiceImpl implements EventService {
             }
         } else {
             List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
+
             if (filterType.equalsIgnoreCase("All")) {
                 List<UserEventStatus> userEventStatuses = userEventStatusRepository.findByUserIdId(user.getId());
                 for (UserEventStatus userEvent : userEventStatuses) {
@@ -188,7 +193,10 @@ public class EventServiceImpl implements EventService {
                     }
                 }
             }
+
+            resultEvents = resultEvents.stream().sorted((a, b) -> b.getId().compareTo(a.getId())).toList();
         }
+
         return resultEvents.stream()
                 .limit(n) // Limit the stream to first N elements
                 .map(event -> modelMapper.map(event, EventResponseDTO.class))

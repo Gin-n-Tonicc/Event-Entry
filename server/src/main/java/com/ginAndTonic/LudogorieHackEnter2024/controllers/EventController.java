@@ -71,7 +71,7 @@ public class EventController {
             HttpServletRequest httpServletRequest) {
         try {
             List<EventResponseDTO> events = eventService.filterEventsByCriteria(hasGoneTo, filterType, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey), n);
-            return ResponseEntity.ok(Lists.newReversedArrayList(events));
+            return ResponseEntity.ok(events);
         } catch (ChangeSetPersister.NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

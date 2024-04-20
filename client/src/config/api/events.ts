@@ -5,6 +5,7 @@ const base = `${baseApiUrl}/events`;
 
 export const eventsPaths = Object.seal({
   create: `${base}/create`,
+  like: (id: number) => `${base}/like/${id}`,
   filter: (
     hasGoneTo: boolean,
     numberEvents: number,
