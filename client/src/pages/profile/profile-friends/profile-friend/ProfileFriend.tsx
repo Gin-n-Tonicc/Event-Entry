@@ -6,9 +6,10 @@ import { IFullUser, PageEnum } from '../../../../types';
 interface ProfileFriendProps {
   friend: IFullUser;
   refresh: () => Promise<void>;
+  isOwner: boolean;
 }
 
-function ProfileFriend({ friend, refresh }: ProfileFriendProps) {
+function ProfileFriend({ friend, refresh, isOwner }: ProfileFriendProps) {
   const { del } = useFetch<void>(friendsPaths.removeRequest(friend.id));
 
   const onDelete = async () => {
@@ -38,11 +39,13 @@ function ProfileFriend({ friend, refresh }: ProfileFriendProps) {
           Workplace: {friend.currentWorkPlace}
         </span>
       </div>
-      <button
-        className="btn btn-outline-primary py-1 px-2 ms-auto"
-        onClick={onDelete}>
-        Remove
-      </button>
+      {isOwner && (
+        <button
+          className="btn btn-outline-primary py-1 px-2 ms-auto"
+          onClick={onDelete}>
+          Remove
+        </button>
+      )}
     </div>
   );
 }

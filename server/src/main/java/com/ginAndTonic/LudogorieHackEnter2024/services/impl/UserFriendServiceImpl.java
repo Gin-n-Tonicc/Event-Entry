@@ -83,7 +83,7 @@ public class UserFriendServiceImpl implements UserFriendService {
     public List<UserFriend> getFriendsForUser(Long id) {
         userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
-        return userFriendRepository.findByUserIdAndIsConfirmedIsTrue(id);
+        return userFriendRepository.findAllByUser_IdAndIsConfirmedTrueOrFriend_IdAndIsConfirmedTrue(id, id);
     }
 
     @Override

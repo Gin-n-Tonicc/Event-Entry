@@ -17,4 +17,6 @@ public interface UserFriendRepository extends JpaRepository<UserFriend, Long> {
 
     List<UserFriend> findByUserIdAndIsConfirmedIsTrue(Long userId);
     List<UserFriend> findByUserIdAndIsConfirmedIsFalse(Long userId);
+
+    List<UserFriend> findAllByUser_IdAndIsConfirmedTrueOrFriend_IdAndIsConfirmedTrue(Long userId, Long friendId);
 }

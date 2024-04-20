@@ -4,6 +4,7 @@ import ProfileFriend from './profile-friend/ProfileFriend';
 interface ProfileFriendsProps {
   friends: IFullUser[];
   refresh: () => Promise<void>;
+  isOwner: boolean;
 }
 
 function ProfileFriends(props: ProfileFriendsProps) {
@@ -21,7 +22,12 @@ function ProfileFriends(props: ProfileFriendsProps) {
           <div>
             <div className="card d-flex row">
               {props.friends.map((x) => (
-                <ProfileFriend friend={x} key={x.id} refresh={props.refresh} />
+                <ProfileFriend
+                  friend={x}
+                  key={x.id}
+                  refresh={props.refresh}
+                  isOwner={props.isOwner}
+                />
               ))}
             </div>
           </div>
