@@ -15,9 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Builder
@@ -45,21 +43,22 @@ public class User implements UserDetails {
     private String password;
 
     @NotNull(message = "The address should not be null!")
+    @Size(min = 10, message = "The address mush be at least 10 symbols")
     private String address;
 
     @NotNull(message = "The education shot not be null!")
-    @Size(min = 10, max = 120, message = "The education must be between 60 and 120 symbols!")
+    @Size(min = 10, max = 120, message = "The education must be between 10 and 120 symbols!")
     private String education;
 
     @Nullable
     private String currentWorkPlace;
 
     @NotNull(message = "The work experience shot not be null!")
-    @Size(min = 10, max = 120, message = "The work experience must be between 60 and 120 symbols!")
+    @Size(min = 20, max = 255, message = "The work experience must be between 20 and 255 symbols!")
     private String workExperience;
 
     @NotNull(message = "The work experience shot not be null!")
-    @Size(min = 10, max = 120, message = "The work experience must be between 60 and 120 symbols!")
+    @Size(min = 20, max = 255, message = "The work experience must be between 20 and 255 symbols!")
     private String whatCanHelpWith;
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -76,7 +75,11 @@ public class User implements UserDetails {
     private boolean deleted;
     @Column(name = "enabled")
     private boolean enabled;
+
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserFriend> friendships = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
