@@ -16,7 +16,7 @@ export default function FormInput(props: FormInputProps) {
 
   return (
     <FormErrorWrapper message={fieldState.error?.message}>
-      <div className="form-floating mb-3">
+      <div className="form-floating">
         <input
           {...field}
           className={props.inputClasses}

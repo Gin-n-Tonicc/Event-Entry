@@ -13,7 +13,7 @@ interface RegisterSkillsSelectProps {
 
 function RegisterSkillsSelect(props: RegisterSkillsSelectProps) {
   return (
-    <div className="form-floating mb-3">
+    <div className="form-floating">
       <Select
         placeholder={props.placeholder}
         options={props.options}

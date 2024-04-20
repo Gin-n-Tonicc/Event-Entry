@@ -1,7 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { MultiValue } from 'react-select';
+import { useFetch } from 'use-http';
+import FormErrorWrapper from '../../../components/form-error-wrapper/FormErrorWrapper';
 import FormInput from '../../../components/form-input/FormInput';
+import { authPaths } from '../../../config/api';
+import useValidators from '../../../hooks/useValidator';
 import './Register.scss';
 import RegisterSkillsSelect, {
   SkillOption,
@@ -17,11 +21,14 @@ type Inputs = {
   Email: string;
   Password: string;
   'Repeat Password': string;
+  WICHW: string;
   skillsHave: MultiValue<SkillOption>;
   skillsNeed: MultiValue<SkillOption>;
 };
 
 function Register() {
+  const { auth } = useValidators();
+
   const {
     handleSubmit,
     control,
@@ -43,14 +50,48 @@ function Register() {
       Email: '',
       Password: '',
       'Repeat Password': '',
+      WICHW: '',
       skillsHave: [],
       skillsNeed: [],
     },
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const formValues = watch();
+  const { post, response, loading } = useFetch<object>(authPaths.register);
+
+  useEffect(() => {
+    const areEqual = formValues.Password === formValues['Repeat Password'];
+    const hasError = Boolean(errors['Repeat Password']);
+    const hasManualError =
+      hasError && errors['Repeat Password']?.type === 'manual';
+
+    if (!hasError && !areEqual) {
+      setError('Repeat Password', {
+        type: 'manual',
+        message: 'Repeat password must match password',
+      });
+    }
+
+    if (hasManualError && areEqual) {
+      clearErrors('Repeat Password');
+    }
+  }, [errors, formValues, setError, clearErrors]);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
+    await post({
+      firstName: data['First Name'].trim(),
+      lastName: data['Last Name'].trim(),
+      workplace: data['Current Workplace'].trim(),
+      education: data.Education,
+      experience: data.Experience,
+      address: data.Address,
+      email: data.Email,
+      password: data.Password,
+      skillsHave: data.skillsHave.map((x) => Number(x.value)),
+      skillsNeed: data.skillsNeed.map((x) => Number(x.value)),
+    });
   };
 
   const mockedSkills = [...new Array(5)].map((x, i) => ({
@@ -96,6 +137,7 @@ function Register() {
                 inputClasses="form-control"
                 placeholder="name@example.com"
                 labelText="Email Address*"
+                rules={auth.EMAIL_VALIDATIONS}
               />
 
               <FormInput
@@ -105,6 +147,7 @@ function Register() {
                 name="First Name"
                 placeholder="John"
                 labelText="First Name*"
+                rules={auth.FIRST_NAME_VALIDATIONS}
               />
 
               <FormInput
@@ -114,6 +157,7 @@ function Register() {
                 name="Last Name"
                 placeholder="Johnson"
                 labelText="Last Name*"
+                rules={auth.LAST_NAME_VALIDATIONS}
               />
 
               <FormInput
@@ -132,6 +176,7 @@ function Register() {
                 name="Education"
                 placeholder="1 SU 'st. Sedmochislenici'"
                 labelText="Education*"
+                rules={auth.EDUCATION_VALIDATIONS}
               />
 
               <FormInput
@@ -141,6 +186,7 @@ function Register() {
                 name="Password"
                 placeholder="Password"
                 labelText="Password*"
+                rules={auth.PASSWORD_VALIDATIONS}
               />
 
               <FormInput
@@ -150,28 +196,53 @@ function Register() {
                 name="Repeat Password"
                 placeholder="Repeat Password"
                 labelText="Repeat Password*"
+                rules={auth.REPEAT_PASSWORD_VALIDATIONS}
               />
 
-              <div className="form-floating mb-3">
-                <textarea
-                  className="form-control"
-                  placeholder="Leave a comment here"
-                  id="floatingTextarea2"
-                  style={{ height: '100px' }}
-                  {...register('Experience')}></textarea>
-                <label htmlFor="floatingTextarea2">Experience</label>
-              </div>
+              <FormErrorWrapper message={errors.Experience?.message}>
+                <div className="form-floating">
+                  <textarea
+                    className="form-control"
+                    placeholder="Leave a comment here"
+                    id="floatingTextarea2"
+                    style={{ height: '100px' }}
+                    {...register('Experience', {
+                      ...auth.EXPERIENCE_VALIDATIONS,
+                    })}></textarea>
+                  <label htmlFor="floatingTextarea2">Experience*</label>
+                </div>
+              </FormErrorWrapper>
 
-              <RegisterSkillsSelect
-                options={mockedSkills}
-                placeholder={'Select what skills you HAVE...'}
-                onChange={onSkillsHaveChange}
-              />
-              <RegisterSkillsSelect
-                options={mockedSkills}
-                placeholder={'Select what skills you NEED...'}
-                onChange={onSkillsNeedChange}
-              />
+              <FormErrorWrapper message={errors.WICHW?.message}>
+                <div className="form-floating">
+                  <textarea
+                    className="form-control"
+                    placeholder="Leave a comment here"
+                    id="floatingTextarea2"
+                    style={{ height: '100px' }}
+                    {...register('WICHW', {
+                      ...auth.WICHW_VALIDATIONS,
+                    })}></textarea>
+                  <label htmlFor="floatingTextarea2">
+                    What I can help with*
+                  </label>
+                </div>
+              </FormErrorWrapper>
+
+              <FormErrorWrapper message={undefined}>
+                <RegisterSkillsSelect
+                  options={mockedSkills}
+                  placeholder={'Select what skills you HAVE...'}
+                  onChange={onSkillsHaveChange}
+                />
+              </FormErrorWrapper>
+              <FormErrorWrapper message={undefined}>
+                <RegisterSkillsSelect
+                  options={mockedSkills}
+                  placeholder={'Select what skills you NEED...'}
+                  onChange={onSkillsNeedChange}
+                />
+              </FormErrorWrapper>
 
               <div className="d-grid">
                 <button
