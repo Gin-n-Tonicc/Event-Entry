@@ -11,4 +11,5 @@ public interface UserFriendService {
     void removeFriend(PublicUserDTO user, Long friendId);
 
     List<UserFriend> getFriendsForUser(PublicUserDTO friendId);
+    void confirmFriendRequest(Long loggedUserId, Long friendId);
 }

@@ -25,4 +25,6 @@ public class UserFriend {
     @ManyToOne
     @JoinColumn(name = "friend_id")
     private User friend;
+
+    private boolean isConfirmed;
 }

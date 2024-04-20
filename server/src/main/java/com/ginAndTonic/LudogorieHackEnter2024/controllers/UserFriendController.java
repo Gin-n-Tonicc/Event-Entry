@@ -40,4 +40,11 @@ public class UserFriendController {
         List<UserFriend> friends = userFriendService.getFriendsForUser((PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
         return ResponseEntity.ok(friends);
     }
+
+    @PutMapping("/confirm/{friendId}")
+    public ResponseEntity<Void> confirmFriendRequest(@PathVariable Long friendId, HttpServletRequest httpServletRequest) {
+        PublicUserDTO loggedUser = (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey);
+        userFriendService.confirmFriendRequest(loggedUser.getId(), friendId);
+        return ResponseEntity.ok().build();
+    }
 }

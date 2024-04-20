@@ -3,7 +3,9 @@ package com.ginAndTonic.LudogorieHackEnter2024.services.impl;
 
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.BadRequestException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.user.UserNotFoundException;
+import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userFriend.CannotConfirmFriendshipException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userFriend.FriendshipAlreadyExistsException;
+import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userFriend.UserFriendNotFoundException;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserFriend;
@@ -32,7 +34,7 @@ public class UserFriendServiceImpl implements UserFriendService {
         User user = userRepository.findById(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
         User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
 
-        if(Objects.equals(user.getId(), friend.getId())){
+        if (Objects.equals(user.getId(), friend.getId())) {
             throw new BadRequestException("You can't send a friendship to yourself!");
         }
 
@@ -46,6 +48,20 @@ public class UserFriendServiceImpl implements UserFriendService {
         }
     }
 
+    @Override
+    public void confirmFriendRequest(Long loggedUserId, Long friendId) {
+        User user = userRepository.findById(loggedUserId).orElseThrow(UserNotFoundException::new);
+        User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
+
+        UserFriend userFriend = userFriendRepository.findByUserIdAndFriendId(user.getId(), friend.getId())
+                .orElseThrow(UserFriendNotFoundException::new);
+        if(userFriend.getFriend().getId() == friend.getId()) {
+            userFriend.setConfirmed(true);
+            userFriendRepository.save(userFriend);
+        } else{
+            throw new CannotConfirmFriendshipException();
+        }
+    }
     @Override
     public void removeFriend(PublicUserDTO loggedUser, Long friend) {
         userRepository.findById(friend).orElseThrow(UserNotFoundException::new);
