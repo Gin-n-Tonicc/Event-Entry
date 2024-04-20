@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFetch } from 'use-http';
 import {
@@ -7,6 +7,7 @@ import {
   userEventStatusesPaths,
 } from '../../config/api';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { IUser } from '../../types';
 import { IEvent } from '../../types/interfaces/events/IEvent';
 
 const CHARACTER_DESCRIPTION_THRESHOLD = 60;
@@ -15,7 +16,7 @@ function EventsDetails() {
   const { id } = useParams();
   const [reduced1, setReduced] = useState<string[]>([]);
   const { user } = useAuthContext();
-  const [userEventStatuses, setUserEventStatuses] = useState<object[]>([]);
+  const [participatingUsers, setParticipatingUsers] = useState<IUser[]>([]);
 
   const eventId = Number(id || -1);
 
@@ -24,8 +25,8 @@ function EventsDetails() {
     []
   );
 
-  const { data: userEventStatusesFetch, loading: loadingStatuses } = useFetch<
-    object[]
+  const { data: participatingUsersFetch, loading: loadingStatuses } = useFetch<
+    IUser[]
   >(userEventStatusesPaths.byEvent(eventId), []);
 
   const { post: postStatus, response } = useFetch<object[]>(
@@ -33,11 +34,12 @@ function EventsDetails() {
   );
 
   useEffect(() => {
-    if (!userEventStatusesFetch) {
+    if (!participatingUsersFetch) {
       return;
     }
-    setUserEventStatuses(userEventStatusesFetch);
-  }, [userEventStatusesFetch]);
+
+    setParticipatingUsers(participatingUsersFetch);
+  }, [participatingUsersFetch]);
 
   useEffect(() => {
     if (!event) {
@@ -85,13 +87,18 @@ function EventsDetails() {
       eventId: eventId,
     };
 
-    const status = await postStatus(body);
+    await postStatus(body);
     if (response.ok) {
-      setUserEventStatuses((prev) => [...prev, status]);
+      setParticipatingUsers((prev) => [...prev, user as IUser]);
     }
   };
 
-  const participating = userEventStatuses.length >= 1;
+  console.log(participatingUsers);
+
+  const participating = useMemo(
+    () => participatingUsers.some((x) => x.id === user.id),
+    [participatingUsers, user]
+  );
 
   return (
     <>
@@ -138,7 +145,7 @@ function EventsDetails() {
                     </span>
                     <span className="text-truncate me-0">
                       <i className="fas fa-user text-primary me-2" />
-                      People Going: {event?.liked_users.length}
+                      People Going: {participatingUsers.length}
                     </span>
                   </div>
                 </div>

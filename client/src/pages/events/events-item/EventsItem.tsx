@@ -12,7 +12,7 @@ function EventsItem(props: EventsItemProps) {
   const { isAuthenticated, user } = useAuthContext();
 
   const [hasLiked, setHasLiked] = useState(
-    props.liked_users.some((x) => x.id, user.id)
+    props.liked_users.some((x) => x.id === user.id)
   );
 
   const [peopleInterested, setPeopleInterested] = useState(

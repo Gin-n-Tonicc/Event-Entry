@@ -165,22 +165,13 @@ public class EventServiceImpl implements EventService {
                 resultEvents = eventRepository.findByStartTimeAfterAndDeletedIsFalseOrderByIdDesc(LocalDateTime.now());
             } else if (filterType.equalsIgnoreCase("Favourited")) {
                 resultEvents = eventRepository.findEventsLikedByUser(user);
-                List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
-                for (UserEventStatus userEventStatus : userEventStatusList) {
-                    for (Event event : resultEvents) {
-                        if (Objects.equals(userEventStatus.getEventId().getId(), event.getId())) {
-                            return null;
-                        }
-                    }
-                }
             }
         } else {
             List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
 
             if (filterType.equalsIgnoreCase("All")) {
-                List<UserEventStatus> userEventStatuses = userEventStatusRepository.findByUserIdId(user.getId());
-                for (UserEventStatus userEvent : userEventStatuses) {
-                    Event event = eventRepository.findById(userEvent.getId()).orElseThrow(NoSuchElementException::new);
+                for (UserEventStatus userEvent : userEventStatusList) {
+                    Event event = eventRepository.findById(userEvent.getEventId().getId()).orElseThrow(NoSuchElementException::new);
                     resultEvents.add(event);
                 }
             } else if (filterType.equalsIgnoreCase("Favourited")) {

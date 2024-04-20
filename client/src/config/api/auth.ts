@@ -7,7 +7,6 @@ export const authPaths = Object.seal({
   login: `${base}/authenticate`,
   logout: `${base}/logout`,
   refreshTokenPath: '/refresh-token',
-  completeOAuth: `${base}/complete-oauth`,
   refreshToken() {
     return `${base}${this.refreshTokenPath}`;
   },

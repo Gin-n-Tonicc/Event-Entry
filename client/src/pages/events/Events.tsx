@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CachePolicies, useFetch } from 'use-http';
+import Spinner from '../../components/spinner/Spinner';
 import { eventsPaths } from '../../config/api';
 import { EventsFilterEnum } from '../../types';
 import { IEvent } from '../../types/interfaces/events/IEvent';
@@ -20,6 +21,10 @@ function Events() {
     { cachePolicy: CachePolicies.CACHE_AND_NETWORK },
     [haveGoneToFilter, eventsFilter, eventsNumber]
   );
+
+  if (!events) {
+    return <Spinner />;
+  }
 
   return (
     <>
