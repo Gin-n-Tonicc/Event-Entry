@@ -19,6 +19,8 @@ public class EventDTO {
 
     private String address;
 
+    private File picture;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;

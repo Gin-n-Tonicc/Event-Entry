@@ -20,8 +20,8 @@ public class UserCreateException extends BadRequestException {
     public UserCreateException(MessageSource messageSource, boolean isUnique) {
         super(
                 isUnique
-                        ? messageSource.getMessage("user.email.exists", null, LocaleContextHolder.getLocale())
-                        : messageSource.getMessage("user.invalid.data", null, LocaleContextHolder.getLocale())
+                        ? "An user already exists with the same email!"
+                        : "Invalid user data!"
         );
     }
 

@@ -9,7 +9,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
  * Sets the appropriate message using MessageSource (the messages are in src/main/resources/messages).
  */
 public class InvalidTokenException extends UnauthorizedException {
-    public InvalidTokenException(MessageSource messageSource) {
-        super(messageSource.getMessage("token.invalid", null, LocaleContextHolder.getLocale()));
+    public InvalidTokenException() {
+        super("Invalid Session! Session expired!");
     }
 }

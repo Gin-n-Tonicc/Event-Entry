@@ -124,7 +124,6 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             // Default names after the user registers with OAUth2 and before they fill some other necessary information
             final String NAME_PLACEHOLDER = "CHANGE_NAME";
-            final String DESCRIPTION_PLACEHOLDER = "CHANGE_THE_DESCRIPTION_PLEASE_CHANGE_THE_DESCRIPTION_PLEASEEE";
             final String ADDRESS_PLACEHOLDER = "CHANGE_ADDRESS";
 
             String username = oAuth2User.getName().toLowerCase()
@@ -132,13 +131,12 @@ public class UserServiceImpl implements UserService {
 
             RegisterRequest registerRequest = new RegisterRequest();
 
+            // TODO: Add missing setters!!
             registerRequest.setEmail(oAuth2User.getEmail());
             registerRequest.setProvider(oAuth2User.getProvider());
-            registerRequest.setUsername(username);
             registerRequest.setFirstname(NAME_PLACEHOLDER);
             registerRequest.setLastname(NAME_PLACEHOLDER);
             registerRequest.setRole(Role.USER);
-            registerRequest.setDescription(DESCRIPTION_PLACEHOLDER);
             registerRequest.setAddress(ADDRESS_PLACEHOLDER);
 
             user = userRepository.save(buildUser(registerRequest));
@@ -178,6 +176,12 @@ public class UserServiceImpl implements UserService {
                 .role(request.getRole())
                 .provider(request.getProvider())
                 .address(request.getAddress())
+                .education(request.getEducation())
+                .currentWorkPlace(request.getCurrentWorkPlace())
+                .workExperience(request.getWorkExperience())
+                .whatCanHelpWith(request.getWhatCanHelpWith())
+                .skills(request.getSkills())
+                .lookingForSkills(request.getLookingForSkills())
                 .additionalInfoRequired(additionalInfoRequired)
                 .deleted(false);
 
