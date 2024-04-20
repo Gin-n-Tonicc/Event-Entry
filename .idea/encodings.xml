@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/src/main/resources/db/migration/V2__Create_Tokens_Table.sql" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/server/src/main/resources/db/migration/V5__Add_Picture_Column.sql" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/server/src/main/resources/db/migration/V5__Create_Files_Table.sql" charset="windows-1251" />
+  </component>
+</project>
