@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
+import static com.ginAndTonic.LudogorieHackEnter2024.services.impl.security.TokenServiceImpl.AUTH_COOKIE_KEY_JWT;
 
 /**
  * LogoutHandler is responsible for handling user logout by invalidating the JWT token and removing associated cookies.

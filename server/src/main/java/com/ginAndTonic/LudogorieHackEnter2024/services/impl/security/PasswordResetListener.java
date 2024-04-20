@@ -1,9 +1,9 @@
-package com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry;
+package com.ginAndTonic.LudogorieHackEnter2024.services.impl.security;
 
 import com.ginAndTonic.LudogorieHackEnter2024.config.FrontendConfig;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.services.UserService;
-import com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.event.OnPasswordResetRequestEvent;
+import com.ginAndTonic.LudogorieHackEnter2024.services.impl.event.OnPasswordResetRequestEvent;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationListener;

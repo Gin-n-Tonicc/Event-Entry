@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.handlers.JwtAuthenticationEntryPoint;
 import com.ginAndTonic.LudogorieHackEnter2024.filters.JwtAuthenticationFilter;
 import com.ginAndTonic.LudogorieHackEnter2024.security.OAuth2LoginSuccessHandler;
-import com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.CustomOAuth2UserService;
+import com.ginAndTonic.LudogorieHackEnter2024.services.impl.security.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/api/v1/files/upload",
+                        "/api/v1/events/**",
                         "/api/v1/files/**",
                         "/api/v1/messages/**",
                         "/api/v1/auth/**",

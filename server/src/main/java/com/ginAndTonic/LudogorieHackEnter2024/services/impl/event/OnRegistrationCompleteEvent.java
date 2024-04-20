@@ -1,4 +1,4 @@
-package com.ginAndTonic.LudogorieHackEnter2024.services.impl.secutiry.event;
+package com.ginAndTonic.LudogorieHackEnter2024.services.impl.event;
 
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import org.springframework.context.ApplicationEvent;

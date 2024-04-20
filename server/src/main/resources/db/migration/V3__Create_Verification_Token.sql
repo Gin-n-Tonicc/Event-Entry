@@ -1,5 +1,5 @@
 CREATE TABLE verification_token (
-    id SERIAL PRIMARY KEY,
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
     token VARCHAR(255) NOT NULL,
     user_id BIGINT NOT NULL,
     expiry_date TIMESTAMP NOT NULL,

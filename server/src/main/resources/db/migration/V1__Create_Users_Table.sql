@@ -1,5 +1,5 @@
 CREATE TABLE _users (
-    id BIGINT PRIMARY KEY,
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
