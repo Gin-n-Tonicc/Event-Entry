@@ -154,6 +154,9 @@ public class UserServiceImpl implements UserService {
         user.setLastname(request.getLastname());
         user.setAddress(request.getAddress());
         user.setRole(request.getRole());
+        user.setEducation(request.getEducation());
+        user.setCurrentWorkPlace(request.getCurrentWorkPlace());
+        user.setWorkExperience(request.getWorkExperience());
         user.setAdditionalInfoRequired(false);
 
         return userRepository.save(user);
