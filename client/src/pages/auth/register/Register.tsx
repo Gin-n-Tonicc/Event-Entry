@@ -4,10 +4,10 @@ import { MultiValue } from 'react-select';
 import { useFetch } from 'use-http';
 import FormErrorWrapper from '../../../components/form-error-wrapper/FormErrorWrapper';
 import FormInput from '../../../components/form-input/FormInput';
-import { authPaths } from '../../../config/api';
+import { authPaths, skillsPaths } from '../../../config/api';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import useValidators from '../../../hooks/useValidator';
-import { AlertTypeEnum, IAuthResponse, RoleEnum } from '../../../types';
+import { AlertTypeEnum, IAuthResponse, ISkill, RoleEnum } from '../../../types';
 import './Register.scss';
 import RegisterSkillsSelect, {
   SkillOption,
@@ -64,6 +64,11 @@ function Register() {
 
   const formValues = watch();
 
+  const { data: skills, loading: loadingSkills } = useFetch<ISkill[]>(
+    skillsPaths.getAll,
+    []
+  );
+
   const { post, response, loading } = useFetch<IAuthResponse>(
     authPaths.register
   );
@@ -96,13 +101,13 @@ function Register() {
       address: data.Address.trim(),
       email: data.Email.trim(),
       password: data.Password.trim(),
-      skills: data.skillsHave.map((x) => Number(x.value)),
-      lookingForSkills: data.skillsNeed.map((x) => Number(x.value)),
+      skills: data.skillsHave.map((x) => skills?.[Number(x.value)]),
+      lookingForSkills: data.skillsNeed.map((x) => skills?.[Number(x.value)]),
       whatCanHelpWith: data.WICHW.trim(),
       role: data.role,
     };
 
-    const user = await post(body);
+    await post(body);
 
     if (response.ok) {
       reset();
@@ -113,10 +118,11 @@ function Register() {
     }
   };
 
-  const mockedSkills = [...new Array(5)].map((x, i) => ({
-    value: i.toString(),
-    label: 'Software Engineering' + i * 32,
-  }));
+  const skillsAsSelectOptions =
+    skills?.map((x) => ({
+      value: x.id.toString(),
+      label: x.name,
+    })) || [];
 
   const onSkillsHaveChange = useCallback(
     (val: MultiValue<SkillOption>) => {
@@ -260,14 +266,14 @@ function Register() {
 
               <FormErrorWrapper message={undefined}>
                 <RegisterSkillsSelect
-                  options={mockedSkills}
+                  options={skillsAsSelectOptions}
                   placeholder={'Select what skills you HAVE...'}
                   onChange={onSkillsHaveChange}
                 />
               </FormErrorWrapper>
               <FormErrorWrapper message={undefined}>
                 <RegisterSkillsSelect
-                  options={mockedSkills}
+                  options={skillsAsSelectOptions}
                   placeholder={'Select what skills you NEED...'}
                   onChange={onSkillsNeedChange}
                 />
