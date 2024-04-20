@@ -1,11 +1,12 @@
 import { useCallback, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { MultiValue } from 'react-select';
-import { useFetch } from 'use-http';
+import { CachePolicies, useFetch } from 'use-http';
 import FormErrorWrapper from '../../../components/form-error-wrapper/FormErrorWrapper';
 import FormInput from '../../../components/form-input/FormInput';
 import { authPaths } from '../../../config/api';
 import useValidators from '../../../hooks/useValidator';
+import { RoleEnum } from '../../../types/enums';
 import './Register.scss';
 import RegisterSkillsSelect, {
   SkillOption,
@@ -24,6 +25,7 @@ type Inputs = {
   WICHW: string;
   skillsHave: MultiValue<SkillOption>;
   skillsNeed: MultiValue<SkillOption>;
+  role: RoleEnum;
 };
 
 function Register() {
@@ -53,12 +55,15 @@ function Register() {
       WICHW: '',
       skillsHave: [],
       skillsNeed: [],
+      role: RoleEnum.USER,
     },
     mode: 'onChange',
   });
 
   const formValues = watch();
-  const { post, response, loading } = useFetch<object>(authPaths.register);
+  const { post, response, loading } = useFetch<object>(authPaths.register, {
+    cache: CachePolicies.NO_CACHE,
+  });
 
   useEffect(() => {
     const areEqual = formValues.Password === formValues['Repeat Password'];
@@ -79,19 +84,28 @@ function Register() {
   }, [errors, formValues, setError, clearErrors]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-    await post({
-      firstName: data['First Name'].trim(),
-      lastName: data['Last Name'].trim(),
-      workplace: data['Current Workplace'].trim(),
+    const body = {
+      firstname: data['First Name'].trim(),
+      lastname: data['Last Name'].trim(),
+      currentWorkPlace: data['Current Workplace'].trim(),
       education: data.Education,
-      experience: data.Experience,
+      workExperience: data.Experience,
       address: data.Address,
       email: data.Email,
       password: data.Password,
-      skillsHave: data.skillsHave.map((x) => Number(x.value)),
-      skillsNeed: data.skillsNeed.map((x) => Number(x.value)),
-    });
+      skills: data.skillsHave.map((x) => Number(x.value)),
+      lookingForSkills: data.skillsNeed.map((x) => Number(x.value)),
+      whatCanHelpWith: data.WICHW,
+      role: data.role,
+    };
+
+    console.log(body);
+
+    const hello = await post(body);
+
+    if (response.ok) {
+      console.log(hello);
+    }
   };
 
   const mockedSkills = [...new Array(5)].map((x, i) => ({
@@ -164,9 +178,10 @@ function Register() {
                 control={control}
                 type="text"
                 inputClasses="form-control"
-                name="Current Workplace"
+                name="Address"
                 placeholder="LudogorieSoft, Targovishte 7700, Bulgaria"
-                labelText="Workplace"
+                labelText="Address*"
+                rules={auth.ADDRESS_VALIDATIONS}
               />
 
               <FormInput
@@ -229,6 +244,15 @@ function Register() {
                 </div>
               </FormErrorWrapper>
 
+              <FormInput
+                control={control}
+                type="text"
+                inputClasses="form-control"
+                name="Current Workplace"
+                placeholder="LudogorieSoft, Targovishte 7700, Bulgaria"
+                labelText="Workplace"
+              />
+
               <FormErrorWrapper message={undefined}>
                 <RegisterSkillsSelect
                   options={mockedSkills}
@@ -242,6 +266,29 @@ function Register() {
                   placeholder={'Select what skills you NEED...'}
                   onChange={onSkillsNeedChange}
                 />
+              </FormErrorWrapper>
+
+              <FormErrorWrapper message={undefined}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex justify-content-center align-items-center gap-2">
+                    <input
+                      {...register('role')}
+                      type="radio"
+                      className="form-check-input m-0"
+                      value={RoleEnum.USER}
+                    />
+                    <p className="m-0">User</p>
+                  </div>
+                  <div className="d-flex justify-content-center align-items-center gap-2">
+                    <p className="m-0">Organisation</p>
+                    <input
+                      {...register('role')}
+                      type="radio"
+                      className="form-check-input m-0"
+                      value={RoleEnum.ORGANISATION}
+                    />
+                  </div>
+                </div>
               </FormErrorWrapper>
 
               <div className="d-grid">

@@ -48,18 +48,18 @@ public class User implements UserDetails {
     private String address;
 
     @NotNull(message = "The education shot not be null!")
-    @Size(min = 10, max = 120, message = "The education must be between 60 and 120 symbols!")
+    @Size(min = 10, max = 120, message = "The education must be between 10 and 120 symbols!")
     private String education;
 
     @Nullable
     private String currentWorkPlace;
 
     @NotNull(message = "The work experience shot not be null!")
-    @Size(min = 10, max = 120, message = "The work experience must be between 60 and 120 symbols!")
+    @Size(min = 10, max = 120, message = "The work experience must be between 10 and 120 symbols!")
     private String workExperience;
 
     @NotNull(message = "The work experience shot not be null!")
-    @Size(min = 10, max = 120, message = "The work experience must be between 60 and 120 symbols!")
+    @Size(min = 10, max = 120, message = "The work experience must be between 10 and 120 symbols!")
     private String whatCanHelpWith;
     @NotNull
     @Enumerated(EnumType.STRING)
