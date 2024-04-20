@@ -88,11 +88,12 @@ public class UserEventStatusServiceImpl implements UserEventStatusService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<UserEventStatusDTO> getUserEventStatusesByEventId(Long eventId) {
+    public List<PublicUserDTO> getUsersByEventId(Long eventId) {
         List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByEventIdId(eventId);
+
         return userEventStatusList.stream()
-                .map(event -> modelMapper.map(event, UserEventStatusDTO.class))
+                .map(UserEventStatus::getUserId)
+                .map(user -> modelMapper.map(user, PublicUserDTO.class))
                 .collect(Collectors.toList());
     }
 }
