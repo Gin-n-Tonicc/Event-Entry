@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -53,6 +54,9 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     private List<Skill> skills = new ArrayList<>();
+
+    @ManyToMany
+    private Set<User> liked_users;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
