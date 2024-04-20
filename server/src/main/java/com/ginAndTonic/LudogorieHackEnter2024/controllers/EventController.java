@@ -54,4 +54,11 @@ public class EventController {
         eventService.deleteEvent(id);
         return ResponseEntity.ok("Event with id: " + id + " has been deleted successfully!");
     }
+
+    @GetMapping("/search")
+    public List<EventResponseDTO> searchEvents(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "skillId", required = false) Long skillId) {
+        return eventService.searchEvents(name, skillId);
+    }
 }

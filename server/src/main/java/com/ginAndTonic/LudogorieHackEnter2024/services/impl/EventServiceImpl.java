@@ -111,4 +111,17 @@ public class EventServiceImpl implements EventService {
             throw new EventNotFoundException();
         }
     }
+
+    @Override
+    public List<EventResponseDTO> searchEvents(String searchTerm, Long skillId) {
+        // If searchTerm is empty or null, set it to null to search only by skill
+        searchTerm = (searchTerm != null && !searchTerm.isEmpty()) ? searchTerm : null;
+
+        List<Event> events = eventRepository.searchByNameAndSkill(searchTerm, skillId);
+
+        if(events.isEmpty()){
+            events = eventRepository.findByDeletedFalse();
+        }
+        return events.stream().map(event -> modelMapper.map(event, EventResponseDTO.class)).toList();
+    }
 }

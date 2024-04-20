@@ -17,4 +17,6 @@ public interface EventService {
     EventResponseDTO updateEvent(Long id, EventDTO categoryDTO, PublicUserDTO loggedUser);
 
     void deleteEvent(Long id);
+
+    List<EventResponseDTO> searchEvents(String searchTerm, Long skillId);
 }
