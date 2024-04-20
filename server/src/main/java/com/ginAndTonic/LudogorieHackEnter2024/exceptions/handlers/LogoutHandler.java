@@ -42,7 +42,7 @@ public class LogoutHandler implements org.springframework.security.web.authentic
         // If JWT token is missing or empty, send an error response
         if (jwt == null || jwt.isEmpty()) {
             try {
-                ObjectMapperHelper.writeExceptionToObjectMapper(objectMapper, new InvalidTokenException(messageSource), response);
+                ObjectMapperHelper.writeExceptionToObjectMapper(objectMapper, new InvalidTokenException(), response);
                 return;
             } catch (IOException exception) {
                 return;

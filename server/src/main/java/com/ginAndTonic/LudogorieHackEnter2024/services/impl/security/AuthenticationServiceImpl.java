@@ -93,7 +93,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse refreshToken(String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         String userEmail;
@@ -101,24 +101,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             userEmail = jwtService.extractUsername(refreshToken);
         } catch (JwtException exception) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         if (userEmail == null) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         // Make sure token is a refresh token not access token
         Token token = tokenService.findByToken(refreshToken);
         if (token != null && token.tokenType != TokenType.REFRESH) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         User user = userService.findByEmail(userEmail);
 
         if (!jwtService.isTokenValid(refreshToken, user)) {
             tokenService.revokeToken(token);
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         String accessToken = jwtService.generateToken(user);
@@ -143,13 +143,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse me(String jwtToken) {
         if (jwtToken == null || jwtToken.isEmpty()) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         Token accessToken = tokenService.findByToken(jwtToken);
 
         if (accessToken == null) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         User user = accessToken.getUser();
@@ -164,14 +164,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!isTokenValid) {
             tokenService.revokeAllUserTokens(user);
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         List<Token> tokens = tokenService.findByUser(user);
         Token refreshToken = tokens.stream().filter(x -> x.getTokenType() == TokenType.REFRESH).toList().get(0);
 
         if (refreshToken == null) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
 
         String refreshTokenString;
@@ -205,7 +205,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
         User user = verificationToken.getUser();
         if (user == null) {
-            throw new InvalidTokenException(messageSource);
+            throw new InvalidTokenException();
         }
         verificationToken.setCreatedAt(LocalDateTime.now());
 

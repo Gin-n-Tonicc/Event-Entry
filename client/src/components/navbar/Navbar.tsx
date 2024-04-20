@@ -1,8 +1,65 @@
 import { Link } from 'react-router-dom';
-import { PageEnum } from '../../types';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { PageEnum, RoleEnum } from '../../types';
 import NavItem from './nav-item/NavItem';
 
+function LoggedNav(props: {
+  isOrganisation: boolean;
+  hasFinishedOAuth2: boolean;
+}) {
+  return (
+    <>
+      <NavItem to={PageEnum.Logout} text="Log out" />
+    </>
+  );
+}
+
+function GuestNav() {
+  return (
+    <>
+      <NavItem to={PageEnum.Login} text="Log In" />
+      <NavItem to={PageEnum.Register} text="Sign In" />
+    </>
+  );
+}
+
+function UserNav(props: {
+  isAuthenticated: boolean;
+  isOrganisation: boolean;
+  hasFinishedOAuth2: boolean;
+}) {
+  return (
+    <>
+      <NavItem to={PageEnum.Home} text="Home" />
+      <NavItem to={PageEnum.Contact} text="Contact" />
+      <div className="nav-item dropdown">
+        <a
+          href="#"
+          className="nav-link dropdown-toggle"
+          data-bs-toggle="dropdown">
+          Events
+        </a>
+        <div className="dropdown-menu rounded-0 m-0">
+          <Link to={PageEnum.Events} className="dropdown-item">
+            All Events
+          </Link>
+          {props.isOrganisation && (
+            <a href="job-detail.html" className="dropdown-item">
+              Create Event
+            </a>
+          )}
+        </div>
+      </div>
+      {props.isAuthenticated ? <LoggedNav {...props} /> : <GuestNav />}
+    </>
+  );
+}
+
 function Navbar() {
+  const { user, isAuthenticated, hasFinishedOAuth2 } = useAuthContext();
+
+  const isOrganisation = RoleEnum.ORGANISATION === user.role;
+
   return (
     <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
       <Link
@@ -19,26 +76,12 @@ function Navbar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav ms-auto p-4 p-lg-0">
-          <NavItem to={PageEnum.Home} text="Home" />
-          <NavItem to={PageEnum.Contact} text="Contact" />
-
-          <div className="nav-item dropdown">
-            <a
-              href="#"
-              className="nav-link dropdown-toggle"
-              data-bs-toggle="dropdown">
-              Events
-            </a>
-            <div className="dropdown-menu rounded-0 m-0">
-              <Link to={PageEnum.Events} className="dropdown-item">
-                All Events
-              </Link>
-              <a href="job-detail.html" className="dropdown-item">
-                Create Event
-              </a>
-            </div>
-          </div>
-          <div className="nav-item dropdown">
+          <UserNav
+            isAuthenticated={isAuthenticated}
+            isOrganisation={isOrganisation}
+            hasFinishedOAuth2={hasFinishedOAuth2}
+          />
+          {/* <div className="nav-item dropdown">
             <a
               href="#"
               className="nav-link dropdown-toggle"
@@ -56,16 +99,8 @@ function Navbar() {
                 404
               </a>
             </div>
-          </div>
-          <NavItem to={PageEnum.Login} text="Log In" />
-          <NavItem to={PageEnum.Register} text="Register" />
+          </div> */}
         </div>
-        <a
-          href=""
-          className="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">
-          Post A Job
-          <i className="fa fa-arrow-right ms-3" />
-        </a>
       </div>
     </nav>
   );
