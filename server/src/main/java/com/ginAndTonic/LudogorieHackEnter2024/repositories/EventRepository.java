@@ -11,17 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-    List<Event> findByDeletedFalse();
+    List<Event> findByDeletedFalseOrderByIdDesc();
 
     Optional<Event> findByIdAndDeletedFalse(Long id);
 
     @Query("SELECT e FROM Event e LEFT JOIN e.skills s WHERE " +
             "(LOWER(e.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
             "LOWER(s.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
-            "(:skillId IS NULL OR :skillId IN (SELECT skill.id FROM Skill skill JOIN e.skills))")
+            "(:skillId IS NULL OR :skillId IN (SELECT skill.id FROM Skill skill JOIN e.skills))" +
+            "ORDER BY e.id DESC")
     List<Event> searchByNameAndSkill(@Param("searchTerm") String searchTerm, @Param("skillId") Long skillId);
 
-    @Query("SELECT e FROM Event e JOIN e.liked_users u WHERE u = :user")
+    @Query("SELECT e FROM Event e JOIN e.liked_users u WHERE u = :user ORDER BY e.id DESC")
     List<Event> findEventsLikedByUser(User user);
-    List<Event> findByStartTimeAfterAndDeletedIsFalse(LocalDateTime currentTime);
+    List<Event> findByStartTimeAfterAndDeletedIsFalseOrderByIdDesc(LocalDateTime currentTime);
 }

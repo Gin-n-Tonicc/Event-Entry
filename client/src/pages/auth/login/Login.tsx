@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { CachePolicies, useFetch } from 'use-http';
 import FormInput from '../../../components/form-input/FormInput';
-import { authPaths } from '../../../config/api';
+import { authPaths, OAuthPaths } from '../../../config/api';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import useUrlSearchParam from '../../../hooks/useURLSearchParam';
 import useValidators from '../../../hooks/useValidator';
@@ -88,12 +88,11 @@ function Login() {
               </div>
               <hr className="my-4" />
               <div className="d-grid mb-2">
-                <button
-                  disabled={loading}
+                <a
                   className="btn btn-google btn-login text-uppercase fw-bold"
-                  type="submit">
+                  href={OAuthPaths.google}>
                   <i className="fab fa-google me-2" /> Log in with Google
-                </button>
+                </a>
               </div>
             </form>
           </div>

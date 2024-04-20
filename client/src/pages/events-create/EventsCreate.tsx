@@ -98,7 +98,7 @@ function EventsCreate() {
     const event = await eventPost(body);
     if (postEventRes.ok) {
       reset();
-      navigate(PageEnum.EventsSingle.replace(':id', event.id.toString()));
+      navigate(PageEnum.EventsDetails.replace(':id', event.id.toString()));
     }
   };
 

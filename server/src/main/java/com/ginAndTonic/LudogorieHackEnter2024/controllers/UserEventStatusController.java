@@ -44,7 +44,7 @@ public class UserEventStatusController {
     }
 
     @GetMapping("/by-event")
-    public List<UserEventStatusDTO> getUserEventStatusesByEventId(@RequestParam Long eventId) {
-        return userEventStatusService.getUserEventStatusesByEventId(eventId);
+    public List<PublicUserDTO> getUsersByEventId(@RequestParam Long eventId) {
+        return userEventStatusService.getUsersByEventId(eventId);
     }
 }
