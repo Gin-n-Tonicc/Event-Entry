@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserFriendRepository extends JpaRepository<UserFriend, Long> {
 
-    List<UserFriend> findByUserId(Long userId);
+    List<UserFriend> findByUserIdAndIsConfirmedIsTrue(Long userId);
 
     Optional<UserFriend> findByUserIdAndFriendId(Long userId, Long friendId);
 

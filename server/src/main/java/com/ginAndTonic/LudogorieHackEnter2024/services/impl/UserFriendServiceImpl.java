@@ -1,6 +1,5 @@
 package com.ginAndTonic.LudogorieHackEnter2024.services.impl;
 
-
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.BadRequestException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.user.UserNotFoundException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.userFriend.CannotConfirmFriendshipException;
@@ -55,13 +54,15 @@ public class UserFriendServiceImpl implements UserFriendService {
 
         UserFriend userFriend = userFriendRepository.findByUserIdAndFriendId(user.getId(), friend.getId())
                 .orElseThrow(UserFriendNotFoundException::new);
-        if(userFriend.getFriend().getId() == friend.getId()) {
+
+        if (userFriend.getFriend().getId() == friend.getId()) {
             userFriend.setConfirmed(true);
             userFriendRepository.save(userFriend);
-        } else{
+        } else {
             throw new CannotConfirmFriendshipException();
         }
     }
+
     @Override
     public void removeFriend(PublicUserDTO loggedUser, Long friend) {
         userRepository.findById(friend).orElseThrow(UserNotFoundException::new);
@@ -72,6 +73,6 @@ public class UserFriendServiceImpl implements UserFriendService {
 
     @Override
     public List<UserFriend> getFriendsForUser(PublicUserDTO user) {
-        return userFriendRepository.findByUserId(user.getId());
+        return userFriendRepository.findByUserIdAndIsConfirmedIsTrue(user.getId());
     }
 }
