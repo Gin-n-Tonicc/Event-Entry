@@ -2,7 +2,9 @@ package com.ginAndTonic.LudogorieHackEnter2024.services.impl;
 
 import com.ginAndTonic.LudogorieHackEnter2024.enums.Role;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.AccessDeniedException;
+import com.ginAndTonic.LudogorieHackEnter2024.exceptions.event.EventIncorrectDateException;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.event.EventNotFoundException;
+import com.ginAndTonic.LudogorieHackEnter2024.exceptions.user.UserNotFoundException;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.EventDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.Event;
@@ -14,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,14 +57,22 @@ public class EventServiceImpl implements EventService {
             throw new AccessDeniedException();
         }
 
+        LocalDateTime startDatetime = eventDTO.getStartTime();
+        LocalDateTime endDatetime = eventDTO.getEndTime();
+
+        if (startDatetime == null || endDatetime == null || startDatetime.isAfter(endDatetime)) {
+            throw new EventIncorrectDateException();
+        }
+
         eventDTO.setId(null);
         Event eventEntity = eventRepository.save(modelMapper.map(eventDTO, Event.class));
 
         Optional<User> user = userRepository.findById(loggedUser.getId());
-        eventEntity.setOwnerId(user.get());
+        eventEntity.setOwnerId(user.orElseThrow(UserNotFoundException::new));
 
         return modelMapper.map(eventEntity, EventDTO.class);
     }
+
 
     @Override
     public EventDTO updateEvent(Long id, EventDTO eventDTO, PublicUserDTO loggedUser) {
