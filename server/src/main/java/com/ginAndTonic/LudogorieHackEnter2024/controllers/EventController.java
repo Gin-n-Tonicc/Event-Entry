@@ -3,6 +3,8 @@ package com.ginAndTonic.LudogorieHackEnter2024.controllers;
 import com.ginAndTonic.LudogorieHackEnter2024.filters.JwtAuthenticationFilter;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.EventDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.dto.request.EventRequestDTO;
+import com.ginAndTonic.LudogorieHackEnter2024.model.dto.response.EventResponseDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.services.EventService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -27,7 +29,7 @@ public class EventController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<EventDTO>> getAllCategories() {
+    public ResponseEntity<List<EventResponseDTO>> getAllCategories() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
@@ -37,13 +39,13 @@ public class EventController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO eventDTO, HttpServletRequest httpServletRequest) {
-        EventDTO cratedEvent = eventService.createEvent(eventDTO, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
+    public ResponseEntity<EventResponseDTO> createEvent(@Valid @RequestBody EventRequestDTO eventDTO, HttpServletRequest httpServletRequest) {
+        EventResponseDTO cratedEvent = eventService.createEvent(eventDTO, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
         return new ResponseEntity<>(cratedEvent, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventDTO> updateEvent(@PathVariable("id") Long id, @Valid @RequestBody EventDTO eventDTO, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<EventResponseDTO> updateEvent(@PathVariable("id") Long id, @Valid @RequestBody EventDTO eventDTO, HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(eventService.updateEvent(id, eventDTO, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey)));
     }
 
