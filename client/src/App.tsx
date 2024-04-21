@@ -15,6 +15,7 @@ import AdminTableUsers from './pages/admin/admin-tables/AdminTableUsers';
 import Login from './pages/auth/login/Login';
 import Logout from './pages/auth/logout/Logout';
 import Register from './pages/auth/register/Register';
+import Chat from './pages/chat/Chat';
 import ContactUs from './pages/contact-us/ContactUs';
 import EventsCreate from './pages/events-create/EventsCreate';
 import EventsDetails from './pages/events-details/EventsDetails';
@@ -55,6 +56,7 @@ function App() {
                   element={
                     <ProtectedRoute role={RoleEnum.USER} onlyAuth={true} />
                   }>
+                  <Route path={PageEnum.Chat} element={<Chat />} />
                   <Route path={PageEnum.Logout} element={<Logout />} />
                   <Route path={PageEnum.Profile} element={<Profile />} />
                 </Route>
