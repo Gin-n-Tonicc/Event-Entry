@@ -105,4 +105,26 @@ public class UserFriendServiceImpl implements UserFriendService {
 
         return new ArrayList<>(potentialFriends);
     }
+    @Override
+    public boolean hasSentFriendRequest(PublicUserDTO loggedUser, Long targetUserId) {
+        userRepository.findById(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(targetUserId).orElseThrow(UserNotFoundException::new);
+
+        Optional<UserFriend> friendship = userFriendRepository.findByUserIdAndFriendId(loggedUser.getId(), targetUserId);
+        Optional<UserFriend> friendRequest = userFriendRepository.findByUserIdAndFriendId(targetUserId, loggedUser.getId());
+
+        return friendship.isPresent() || friendRequest.isPresent();
+    }
+
+    @Override
+    public void deleteFriendship(PublicUserDTO loggedUser, Long userId2) {
+        userRepository.findById(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(userId2).orElseThrow(UserNotFoundException::new);
+
+        Optional<UserFriend> friendship1 = userFriendRepository.findByUserIdAndFriendId(loggedUser.getId(), userId2);
+        Optional<UserFriend> friendship2 = userFriendRepository.findByUserIdAndFriendId(userId2, loggedUser.getId());
+
+        friendship1.ifPresent(userFriendRepository::delete);
+        friendship2.ifPresent(userFriendRepository::delete);
+    }
 }

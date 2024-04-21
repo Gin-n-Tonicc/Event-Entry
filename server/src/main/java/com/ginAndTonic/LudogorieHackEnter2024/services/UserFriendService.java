@@ -16,4 +16,6 @@ public interface UserFriendService {
     List<UserFriend> getFriendsForUser(Long id);
     void confirmFriendRequest(Long loggedUserId, Long friendId);
     List<User> suggestFriendsBySkills(PublicUserDTO loggedInUser);
+    boolean hasSentFriendRequest(PublicUserDTO loggedUser, Long targetUserId);
+    void deleteFriendship(PublicUserDTO loggedUser, Long userId2);
 }
