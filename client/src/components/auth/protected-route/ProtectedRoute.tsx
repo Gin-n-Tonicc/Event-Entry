@@ -6,6 +6,7 @@ import { PageEnum, RoleEnum } from '../../../types';
 type ProtectedRouteProps = {
   role: RoleEnum | null;
   onlyAuth?: boolean;
+  blockNotFinishedOAuth?: boolean;
 };
 
 // The component that protects a route based on the user data
@@ -13,8 +14,9 @@ type ProtectedRouteProps = {
 export default function ProtectedRoute({
   role,
   onlyAuth,
+  blockNotFinishedOAuth,
 }: ProtectedRouteProps) {
-  const { user, isOrganisation, isAuthenticated } = useAuthContext();
+  const { user, isAuthenticated, hasFinishedOAuth2 } = useAuthContext();
   const { pathname } = useLocation();
 
   // Attach redirectTo search param
@@ -37,6 +39,10 @@ export default function ProtectedRoute({
     (!role && role == user.role) ||
     (role === user.role && isAuthenticated) ||
     (onlyAuth && isAuthenticated);
+
+  if (passThrough && blockNotFinishedOAuth && !hasFinishedOAuth2) {
+    return <Navigate to={PageEnum.Home} />;
+  }
 
   if (!user.role && !passThrough && pathname !== PageEnum.Logout) {
     return <Navigate to={generateNavPath(PageEnum.Login)} />;
