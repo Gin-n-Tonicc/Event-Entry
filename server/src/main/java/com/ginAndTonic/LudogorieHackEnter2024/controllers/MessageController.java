@@ -42,10 +42,10 @@ public class MessageController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<MessageDTO> sendMessage(@RequestBody MessageDTO message, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Message> sendMessage(@RequestBody MessageDTO message, HttpServletRequest httpServletRequest) {
         PublicUserDTO loggedUser = (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey);
 
-        MessageDTO sentMessage = messageService.sendMessage(message, loggedUser);
+        Message sentMessage = messageService.sendMessage(message, loggedUser);
         return ResponseEntity.ok(sentMessage);
     }
 }

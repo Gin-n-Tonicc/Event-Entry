@@ -34,7 +34,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessageDTO sendMessage(MessageDTO message, PublicUserDTO loggedUser) {
+    public Message sendMessage(MessageDTO message, PublicUserDTO loggedUser) {
         User logged = userRepository.findById(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
 
         message.setSenderId(logged.getId());
@@ -43,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
         Message savedMessage = modelMapper.map(message, Message.class);
         messagesRepository.save(savedMessage);
 
-        return message;
+        return savedMessage;
     }
 }
 

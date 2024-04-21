@@ -10,5 +10,5 @@ import java.util.List;
 public interface MessageService {
     List<Message> getMessagesBetweenUsers(User sender, User receiver);
 
-    MessageDTO sendMessage(MessageDTO message, PublicUserDTO loggedUser);
+    Message sendMessage(MessageDTO message, PublicUserDTO loggedUser);
 }
