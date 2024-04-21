@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -51,7 +52,7 @@ public class MessageServiceImpl implements MessageService {
         sendMessageEmail(savedMessage);
         return messagesRepository.save(savedMessage);
     }
-
+    @Async
     private void sendMessageEmail(Message savedMessage) {
         User userReceiver = userRepository.findById(savedMessage.getReceiverId().getId()).get();
 
@@ -70,6 +71,7 @@ public class MessageServiceImpl implements MessageService {
 
         sendEmail(userReceiver.getEmail(), subject, message);
     }
+
     public void sendEmail(String to, String subject, String text) {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
