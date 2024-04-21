@@ -10,8 +10,10 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ErrorProvider } from './contexts/ErrorContext';
 import Admin from './pages/admin/Admin';
 import AdminTableDefault from './pages/admin/admin-tables/AdminTableDefault';
+import AdminTableEvents from './pages/admin/admin-tables/AdminTableEvents';
 import AdminTableSkills from './pages/admin/admin-tables/AdminTableSkills';
 import AdminTableUsers from './pages/admin/admin-tables/AdminTableUsers';
+import FinishRegister from './pages/auth/finish-register/FinishRegister';
 import Login from './pages/auth/login/Login';
 import Logout from './pages/auth/logout/Logout';
 import Register from './pages/auth/register/Register';
@@ -24,8 +26,9 @@ import Home from './pages/home/Home';
 import NotFound from './pages/not-found/NotFound';
 import Profile from './pages/profile/Profile';
 import './scss/styles.scss';
-import { PageEnum, RoleEnum } from './types';
 import { AdminPageEnum } from './types/enums/AdminPageEnum';
+import { PageEnum } from './types/enums/PageEnum';
+import { RoleEnum } from './types/enums/RoleEnum';
 
 function App() {
   return (
@@ -51,14 +54,29 @@ function App() {
                   <Route path={PageEnum.Register} element={<Register />} />
                 </Route>
 
-                {/* Only logged users */}
+                {/* Only logged users AND finished OAuth2*/}
+                <Route
+                  element={
+                    <ProtectedRoute
+                      role={RoleEnum.USER}
+                      onlyAuth={true}
+                      blockNotFinishedOAuth={true}
+                    />
+                  }>
+                  <Route path={PageEnum.Chat} element={<Chat />} />
+                  <Route path={PageEnum.Profile} element={<Profile />} />
+                </Route>
+
+                {/* Only logged users with or without finished OAuth2*/}
                 <Route
                   element={
                     <ProtectedRoute role={RoleEnum.USER} onlyAuth={true} />
                   }>
-                  <Route path={PageEnum.Chat} element={<Chat />} />
+                  <Route
+                    path={PageEnum.FinishRegister}
+                    element={<FinishRegister />}
+                  />
                   <Route path={PageEnum.Logout} element={<Logout />} />
-                  <Route path={PageEnum.Profile} element={<Profile />} />
                 </Route>
 
                 {/* Only organisations */}
@@ -81,7 +99,10 @@ function App() {
                     path={AdminPageEnum.SKILLS}
                     element={<AdminTableSkills />}
                   />
-
+                  <Route
+                    path={AdminPageEnum.EVENTS}
+                    element={<AdminTableEvents />}
+                  />
                   <Route
                     path="*"
                     element={<Navigate to={PageEnum.NotFound} />}

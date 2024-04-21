@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import Spinner from '../../components/spinner/Spinner';
 import useAuthenticate from '../../hooks/useAuthenticate';
-import { PageEnum, RoleEnum } from '../../types';
+import { PageEnum } from '../../types/enums/PageEnum';
+import { RoleEnum } from '../../types/enums/RoleEnum';
 
 // The component that decides if the user can access the admin panel
 export default function Admin() {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CachePolicies, useFetch } from 'use-http';
 import Spinner from '../../components/spinner/Spinner';
 import { eventsPaths } from '../../config/api';
-import { EventsFilterEnum } from '../../types';
+import { EventsFilterEnum } from '../../types/enums/EventsFilterEnum';
 import { IEvent } from '../../types/interfaces/events/IEvent';
 import EventsBreadcrumb from './events-breadcrumb/EventsBreadcrumb';
 import EventsItem from './events-item/EventsItem';

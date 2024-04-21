@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useFetch } from 'use-http';
 import { authPaths } from '../config/api';
 import { useAuthContext } from '../contexts/AuthContext';
-import { IAuthResponse } from '../types';
-import { initialAuth } from '../utils';
+import { IAuthResponse } from '../types/interfaces/auth/IAuthResponse';
+import { initialAuth } from '../utils/auth';
 
 // The hook that authenticates our user
 export default function useAuthenticate(shouldLogoutUser: boolean = true) {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import * as paginationUtils from '../utils';
+import * as paginationUtils from '../utils/page';
 
 type TogglePageFunction = (page: number) => void;
 type SwitchPageFunction = () => void;

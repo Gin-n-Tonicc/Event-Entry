@@ -11,4 +11,5 @@ export enum PageEnum {
   Profile = '/profile/:userId',
   Admin = '/admin',
   Chat = '/chat/:userId',
+  FinishRegister = '/finish-register',
 }

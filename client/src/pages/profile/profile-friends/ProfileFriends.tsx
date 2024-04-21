@@ -1,4 +1,4 @@
-import { IFullUser } from '../../../types';
+import { IFullUser } from '../../../types/interfaces/auth/IFullUser';
 import ProfileFriend from './profile-friend/ProfileFriend';
 
 interface ProfileFriendsProps {

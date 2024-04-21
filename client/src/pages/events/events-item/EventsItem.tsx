@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { useFetch } from 'use-http';
 import { eventsPaths, filesPaths } from '../../../config/api';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { PageEnum } from '../../../types';
+import { PageEnum } from '../../../types/enums/PageEnum';
 import { IEvent } from '../../../types/interfaces/events/IEvent';
 
 export interface EventsItemProps extends IEvent {}
 
 function EventsItem(props: EventsItemProps) {
-  const { isAuthenticated, user } = useAuthContext();
+  const { isAuthenticated, user, hasFinishedOAuth2 } = useAuthContext();
 
   const [hasLiked, setHasLiked] = useState(
     props.liked_users.some((x) => x.id === user.id)
@@ -65,7 +65,7 @@ function EventsItem(props: EventsItemProps) {
         </div>
         <div className="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
           <div className="d-flex mb-3">
-            {isAuthenticated && (
+            {isAuthenticated && hasFinishedOAuth2 && (
               <a
                 className="btn btn-light btn-square me-3"
                 onClick={likeHandler}>

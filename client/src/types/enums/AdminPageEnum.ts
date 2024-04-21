@@ -2,4 +2,5 @@
 export enum AdminPageEnum {
   USERS = 'users',
   SKILLS = 'skills',
+  EVENTS = 'events',
 }

@@ -123,21 +123,23 @@ public class UserServiceImpl implements UserService {
 
         if (user == null) {
             // Default names after the user registers with OAUth2 and before they fill some other necessary information
-            final String NAME_PLACEHOLDER = "CHANGE_NAME";
             final String ADDRESS_PLACEHOLDER = "CHANGE_ADDRESS";
-
-            String username = oAuth2User.getName().toLowerCase()
-                    .replaceAll("[^a-zA-Z0-9]", "");
+            final String EDUCATION_PLACEHOLDER = "CHANGE_EDUCATION";
+            final String WORK_EXPERIENCE_PLACEHOLDER = "CHANGE_EXPERIENCE_CHANGE";
+            final String WCHW_PLACEHOLDER = "CHANGE_WHAT_CAN_HELP_WITH";
 
             RegisterRequest registerRequest = new RegisterRequest();
 
             // TODO: Add missing setters!!
             registerRequest.setEmail(oAuth2User.getEmail());
             registerRequest.setProvider(oAuth2User.getProvider());
-            registerRequest.setFirstname(NAME_PLACEHOLDER);
-            registerRequest.setLastname(NAME_PLACEHOLDER);
+            registerRequest.setFirstname(oAuth2User.getName());
+            registerRequest.setLastname("");
             registerRequest.setRole(Role.USER);
             registerRequest.setAddress(ADDRESS_PLACEHOLDER);
+            registerRequest.setEducation(EDUCATION_PLACEHOLDER);
+            registerRequest.setWorkExperience(WORK_EXPERIENCE_PLACEHOLDER);
+            registerRequest.setWhatCanHelpWith(WCHW_PLACEHOLDER);
 
             user = userRepository.save(buildUser(registerRequest));
         }
@@ -151,10 +153,13 @@ public class UserServiceImpl implements UserService {
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
         user.setAddress(request.getAddress());
-        user.setRole(request.getRole());
         user.setEducation(request.getEducation());
         user.setCurrentWorkPlace(request.getCurrentWorkPlace());
         user.setWorkExperience(request.getWorkExperience());
+        user.setWhatCanHelpWith(request.getWhatCanHelpWith());
+        user.setRole(request.getRole());
+        user.setSkills(request.getSkills());
+        user.setLookingForSkills(request.getLookingForSkills());
         user.setAdditionalInfoRequired(false);
 
         return userRepository.save(user);

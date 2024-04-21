@@ -1,4 +1,4 @@
-import { camelCaseToWords, capitalizeWord } from '../../../../utils';
+import { camelCaseToWords, capitalizeWord } from '../../../../utils/string';
 
 interface AdminEditFormRowProps {
   columnName: string;

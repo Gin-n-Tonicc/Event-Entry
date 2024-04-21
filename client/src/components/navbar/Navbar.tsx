@@ -1,7 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { PageEnum, RoleEnum } from '../../types';
 import { AdminPageEnum } from '../../types/enums/AdminPageEnum';
+import { PageEnum } from '../../types/enums/PageEnum';
+import { RoleEnum } from '../../types/enums/RoleEnum';
 import profileUserIcon from './img/profile-user-icon.png';
 import NavItem from './nav-item/NavItem';
 
@@ -10,6 +11,7 @@ function AdminNav() {
     <ul className="navbar-nav align-items-center">
       <NavItem text="Users" to={`${PageEnum.Admin}/${AdminPageEnum.USERS}`} />
       <NavItem text="Skills" to={`${PageEnum.Admin}/${AdminPageEnum.SKILLS}`} />
+      <NavItem text="Events" to={`${PageEnum.Admin}/${AdminPageEnum.EVENTS}`} />
     </ul>
   );
 }
@@ -21,12 +23,17 @@ function LoggedNav(props: {
 }) {
   return (
     <>
+      {!props.hasFinishedOAuth2 && (
+        <NavItem to={PageEnum.FinishRegister} text="Finish Register" />
+      )}
       <NavItem to={PageEnum.Logout} text="Log out" />
-      <NavItem
-        to={PageEnum.Profile.replace(':userId', props.userId.toString())}
-        text="Profile"
-        img={profileUserIcon}
-      />
+      {props.hasFinishedOAuth2 && (
+        <NavItem
+          to={PageEnum.Profile.replace(':userId', props.userId.toString())}
+          text="Profile"
+          img={profileUserIcon}
+        />
+      )}
     </>
   );
 }
@@ -62,12 +69,11 @@ function UserNav(props: {
           <Link to={PageEnum.Events} className="dropdown-item">
             All Events
           </Link>
-          {props.isOrganisation ||
-            (props.isAdmin && (
-              <Link to={PageEnum.EventsCreate} className="dropdown-item">
-                Create Event
-              </Link>
-            ))}
+          {(props.isOrganisation || props.isAdmin) && (
+            <Link to={PageEnum.EventsCreate} className="dropdown-item">
+              Create Event
+            </Link>
+          )}
         </div>
       </div>
       {props.isAuthenticated ? <LoggedNav {...props} /> : <GuestNav />}

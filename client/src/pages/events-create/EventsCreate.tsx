@@ -10,8 +10,10 @@ import SkillsSelect, {
 } from '../../components/skills-select/SkillsSelect';
 import { eventsPaths, filesPaths, skillsPaths } from '../../config/api';
 import useValidators from '../../hooks/useValidator';
-import { IFile, ISkill, PageEnum } from '../../types';
+import { PageEnum } from '../../types/enums/PageEnum';
+import { IFile } from '../../types/interfaces/common/IFile';
 import { IEvent } from '../../types/interfaces/events/IEvent';
+import { ISkill } from '../../types/interfaces/skills/ISkill';
 
 type Inputs = {
   Name: string;
