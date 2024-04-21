@@ -37,7 +37,7 @@ function ProfileFriendRequests({
             <div className="card d-flex row">
               {friendRequests?.map((x) => (
                 <ProfileFriendRequest
-                  requester={x.friend}
+                  requester={x.user}
                   refresh={refresh}
                   key={x.id}
                 />

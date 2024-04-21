@@ -55,15 +55,11 @@ public class UserFriendServiceImpl implements UserFriendService {
         User user = userRepository.findById(loggedUserId).orElseThrow(UserNotFoundException::new);
         User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
 
-        UserFriend userFriend = userFriendRepository.findByUserIdAndFriendId(user.getId(), friend.getId())
+        UserFriend userFriend = userFriendRepository.findByUserIdAndFriendId(friend.getId(), user.getId())
                 .orElseThrow(UserFriendNotFoundException::new);
 
-        if (userFriend.getFriend().getId() == friend.getId()) {
-            userFriend.setConfirmed(true);
-            userFriendRepository.save(userFriend);
-        } else {
-            throw new CannotConfirmFriendshipException();
-        }
+        userFriend.setConfirmed(true);
+        userFriendRepository.save(userFriend);
     }
 
     @Override
@@ -77,7 +73,7 @@ public class UserFriendServiceImpl implements UserFriendService {
     @Override
     public List<UserFriend> getFriendRequestsById(Long id) {
        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-       return userFriendRepository.findByUserIdAndIsConfirmedIsFalse(user.getId());
+       return userFriendRepository.findByFriendIdAndIsConfirmedIsFalse(user.getId());
     }
     @Override
     public List<UserFriend> getFriendsForUser(Long id) {

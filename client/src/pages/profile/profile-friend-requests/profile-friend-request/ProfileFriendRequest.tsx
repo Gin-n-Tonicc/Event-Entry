@@ -35,7 +35,9 @@ function ProfileFriendRequest({
         height="40"
       />
       <div>
-        <Link to={PageEnum.Home} className="fw-semibold mb-0">
+        <Link
+          to={PageEnum.Profile.replace(':userId', requester.id.toString())}
+          className="fw-semibold mb-0">
           <h5>
             {requester.firstname} {requester.lastname}
           </h5>
