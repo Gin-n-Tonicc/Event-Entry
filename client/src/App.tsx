@@ -52,7 +52,20 @@ function App() {
                   <Route path={PageEnum.Register} element={<Register />} />
                 </Route>
 
-                {/* Only logged users */}
+                {/* Only logged users AND finished OAuth2*/}
+                <Route
+                  element={
+                    <ProtectedRoute
+                      role={RoleEnum.USER}
+                      onlyAuth={true}
+                      blockNotFinishedOAuth={true}
+                    />
+                  }>
+                  <Route path={PageEnum.Chat} element={<Chat />} />
+                  <Route path={PageEnum.Profile} element={<Profile />} />
+                </Route>
+
+                {/* Only logged users with or without finished OAuth2*/}
                 <Route
                   element={
                     <ProtectedRoute role={RoleEnum.USER} onlyAuth={true} />
@@ -61,9 +74,7 @@ function App() {
                     path={PageEnum.FinishRegister}
                     element={<FinishRegister />}
                   />
-                  <Route path={PageEnum.Chat} element={<Chat />} />
                   <Route path={PageEnum.Logout} element={<Logout />} />
-                  <Route path={PageEnum.Profile} element={<Profile />} />
                 </Route>
 
                 {/* Only organisations */}

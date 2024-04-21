@@ -7,7 +7,7 @@ import FormInput from '../../../components/form-input/FormInput';
 import SkillsSelect, {
   SkillOption,
 } from '../../../components/skills-select/SkillsSelect';
-import { authPaths, skillsPaths } from '../../../config/api';
+import { authPaths, OAuthPaths, skillsPaths } from '../../../config/api';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import useValidators from '../../../hooks/useValidator';
 import { AlertTypeEnum, IAuthResponse, ISkill, RoleEnum } from '../../../types';
@@ -319,12 +319,12 @@ function Register() {
               </div>
               <hr className="my-4" />
               <div className="d-grid mb-2">
-                <button
-                  disabled={loading}
+                <a
                   className="btn btn-google btn-login text-uppercase fw-bold"
-                  type="submit">
+                  type="submit"
+                  href={OAuthPaths.google}>
                   <i className="fab fa-google me-2" /> Sign in with Google
-                </button>
+                </a>
               </div>
             </form>
           </div>
