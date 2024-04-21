@@ -10,7 +10,10 @@ import SkillsSelect, {
 import { authPaths, OAuthPaths, skillsPaths } from '../../../config/api';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import useValidators from '../../../hooks/useValidator';
-import { AlertTypeEnum, IAuthResponse, ISkill, RoleEnum } from '../../../types';
+import { AlertTypeEnum } from '../../../types/enums/AlertTypeEnum';
+import { RoleEnum } from '../../../types/enums/RoleEnum';
+import { IAuthResponse } from '../../../types/interfaces/auth/IAuthResponse';
+import { ISkill } from '../../../types/interfaces/skills/ISkill';
 import '../styles/Register.scss';
 
 type Inputs = {

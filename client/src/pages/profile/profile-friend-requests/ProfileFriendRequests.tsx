@@ -1,6 +1,7 @@
 import { useFetch } from 'use-http';
 import { friendsPaths } from '../../../config/api/friends';
-import { IFullUser, IUserFriend } from '../../../types';
+import { IFullUser } from '../../../types/interfaces/auth/IFullUser';
+import { IUserFriend } from '../../../types/interfaces/profile/IUserFriend';
 import ProfileFriendRequest from './profile-friend-request/ProfileFriendRequest';
 
 interface ProfileFriendRequestsProps {

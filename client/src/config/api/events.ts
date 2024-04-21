@@ -1,4 +1,4 @@
-import { EventsFilterEnum } from '../../types';
+import { EventsFilterEnum } from '../../types/enums/EventsFilterEnum';
 import { baseApiUrl } from './base';
 
 const base = `${baseApiUrl}/events`;

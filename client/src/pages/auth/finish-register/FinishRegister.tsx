@@ -12,7 +12,10 @@ import { OAuthPaths, skillsPaths } from '../../../config/api';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import useValidators from '../../../hooks/useValidator';
-import { IAuthResponse, ISkill, PageEnum, RoleEnum } from '../../../types';
+import { PageEnum } from '../../../types/enums/PageEnum';
+import { RoleEnum } from '../../../types/enums/RoleEnum';
+import { IAuthResponse } from '../../../types/interfaces/auth/IAuthResponse';
+import { ISkill } from '../../../types/interfaces/skills/ISkill';
 import '../styles/Register.scss';
 
 type Inputs = {
@@ -40,8 +43,6 @@ function FinishRegister() {
     register,
     reset,
     watch,
-    setError,
-    clearErrors,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
@@ -59,8 +60,6 @@ function FinishRegister() {
     },
     mode: 'onChange',
   });
-
-  const formValues = watch();
 
   const { data: skills } = useFetch<ISkill[]>(
     skillsPaths.getAll,

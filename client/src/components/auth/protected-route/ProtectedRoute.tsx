@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import { Navigate, Outlet, To, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { PageEnum, RoleEnum } from '../../../types';
+import { PageEnum } from '../../../types/enums/PageEnum';
+import { RoleEnum } from '../../../types/enums/RoleEnum';
 
 type ProtectedRouteProps = {
   role: RoleEnum | null;

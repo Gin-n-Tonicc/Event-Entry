@@ -1,7 +1,11 @@
 import { PropsWithChildren, createContext, useContext } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { IAuthResponse, IAuthStorage, IUser, RoleEnum } from '../types';
-import { deleteJwtCookie, deleteRefreshCookie, isJwtExpired } from '../utils';
+import { RoleEnum } from '../types/enums/RoleEnum';
+import { IAuthResponse } from '../types/interfaces/auth/IAuthResponse';
+import { IAuthStorage } from '../types/interfaces/auth/IAuthStorage';
+import { IUser } from '../types/interfaces/auth/IUser';
+import { deleteJwtCookie, deleteRefreshCookie } from '../utils/cookies';
+import { isJwtExpired } from '../utils/jwt';
 
 type AuthContextType = {
   user: Partial<IAuthStorage>;

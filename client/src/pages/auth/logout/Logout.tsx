@@ -4,7 +4,7 @@ import { useFetch } from 'use-http';
 import Spinner from '../../../components/spinner/Spinner';
 import { authPaths } from '../../../config/api';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { PageEnum } from '../../../types';
+import { PageEnum } from '../../../types/enums/PageEnum';
 
 // The component used to handle logout
 export default function Logout() {

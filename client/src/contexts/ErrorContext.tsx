@@ -6,7 +6,8 @@ import {
   useState,
 } from 'react';
 import { v4 as uuidV4 } from 'uuid';
-import { AlertTypeEnum, IError } from '../types';
+import { AlertTypeEnum } from '../types/enums/AlertTypeEnum';
+import { IError } from '../types/interfaces/common/IError';
 
 const ErrorContext = createContext<null | ErrorContextType>(null);
 const maxErrors = 3;

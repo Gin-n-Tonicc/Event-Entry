@@ -6,7 +6,8 @@ import { authPaths, OAuthPaths } from '../../../config/api';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import useUrlSearchParam from '../../../hooks/useURLSearchParam';
 import useValidators from '../../../hooks/useValidator';
-import { IAuthResponse, PageEnum } from '../../../types';
+import { PageEnum } from '../../../types/enums/PageEnum';
+import { IAuthResponse } from '../../../types/interfaces/auth/IAuthResponse';
 
 type Inputs = {
   Email: string;
