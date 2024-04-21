@@ -11,6 +11,7 @@ function AdminNav() {
     <ul className="navbar-nav align-items-center">
       <NavItem text="Users" to={`${PageEnum.Admin}/${AdminPageEnum.USERS}`} />
       <NavItem text="Skills" to={`${PageEnum.Admin}/${AdminPageEnum.SKILLS}`} />
+      <NavItem text="Events" to={`${PageEnum.Admin}/${AdminPageEnum.EVENTS}`} />
     </ul>
   );
 }
@@ -68,12 +69,11 @@ function UserNav(props: {
           <Link to={PageEnum.Events} className="dropdown-item">
             All Events
           </Link>
-          {props.isOrganisation ||
-            (props.isAdmin && (
-              <Link to={PageEnum.EventsCreate} className="dropdown-item">
-                Create Event
-              </Link>
-            ))}
+          {(props.isOrganisation || props.isAdmin) && (
+            <Link to={PageEnum.EventsCreate} className="dropdown-item">
+              Create Event
+            </Link>
+          )}
         </div>
       </div>
       {props.isAuthenticated ? <LoggedNav {...props} /> : <GuestNav />}

@@ -156,36 +156,39 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventResponseDTO> filterEventsByCriteria(boolean hasGoneTo, String filterType, PublicUserDTO publicUserDTO, int n) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(publicUserDTO.getId()).orElseThrow(UserNotFoundException::new);
         List<Event> resultEvents = new ArrayList<>();
-        if (!hasGoneTo) {
-            if (filterType.equalsIgnoreCase("All")) {
-                resultEvents = eventRepository.findByDeletedFalseOrderByIdDesc();
-            } else if (filterType.equalsIgnoreCase("Will happen")) {
-                resultEvents = eventRepository.findByStartTimeAfterAndDeletedIsFalseOrderByIdDesc(LocalDateTime.now());
-            } else if (filterType.equalsIgnoreCase("Favourited")) {
-                resultEvents = eventRepository.findEventsLikedByUser(user);
-            }
+        if(publicUserDTO == null){
+            resultEvents = eventRepository.findByDeletedFalseOrderByIdDesc();
         } else {
-            List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
-
-            if (filterType.equalsIgnoreCase("All")) {
-                for (UserEventStatus userEvent : userEventStatusList) {
-                    Event event = eventRepository.findById(userEvent.getEventId().getId()).orElseThrow(NoSuchElementException::new);
-                    resultEvents.add(event);
+            User user = userRepository.findById(publicUserDTO.getId()).orElseThrow(UserNotFoundException::new);
+            if (!hasGoneTo) {
+                if (filterType.equalsIgnoreCase("All")) {
+                    resultEvents = eventRepository.findByDeletedFalseOrderByIdDesc();
+                } else if (filterType.equalsIgnoreCase("Will happen")) {
+                    resultEvents = eventRepository.findByStartTimeAfterAndDeletedIsFalseOrderByIdDesc(LocalDateTime.now());
+                } else if (filterType.equalsIgnoreCase("Favourited")) {
+                    resultEvents = eventRepository.findEventsLikedByUser(user);
                 }
-            } else if (filterType.equalsIgnoreCase("Favourited")) {
-                List<Event> likedEvents = eventRepository.findEventsLikedByUser(user);
-                for (UserEventStatus userEventStatus : userEventStatusList) {
-                    for (Event likedEvent : likedEvents) {
-                        if (Objects.equals(userEventStatus.getEventId().getId(), likedEvent.getId())) {
-                            resultEvents.add(likedEvent);
+            } else {
+                List<UserEventStatus> userEventStatusList = userEventStatusRepository.findByUserIdId(user.getId());
+
+                if (filterType.equalsIgnoreCase("All")) {
+                    for (UserEventStatus userEvent : userEventStatusList) {
+                        Event event = eventRepository.findById(userEvent.getEventId().getId()).orElseThrow(NoSuchElementException::new);
+                        resultEvents.add(event);
+                    }
+                } else if (filterType.equalsIgnoreCase("Favourited")) {
+                    List<Event> likedEvents = eventRepository.findEventsLikedByUser(user);
+                    for (UserEventStatus userEventStatus : userEventStatusList) {
+                        for (Event likedEvent : likedEvents) {
+                            if (Objects.equals(userEventStatus.getEventId().getId(), likedEvent.getId())) {
+                                resultEvents.add(likedEvent);
+                            }
                         }
                     }
                 }
+                resultEvents = resultEvents.stream().sorted((a, b) -> b.getId().compareTo(a.getId())).toList();
             }
-
-            resultEvents = resultEvents.stream().sorted((a, b) -> b.getId().compareTo(a.getId())).toList();
         }
 
         return resultEvents.stream()

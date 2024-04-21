@@ -1,5 +1,6 @@
 package com.ginAndTonic.LudogorieHackEnter2024.controllers;
 
+import com.ginAndTonic.LudogorieHackEnter2024.exceptions.AccessDeniedException;
 import com.ginAndTonic.LudogorieHackEnter2024.filters.JwtAuthenticationFilter;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.common.UserEventStatusDTO;
@@ -34,7 +35,13 @@ public class UserEventStatusController {
 
     @PostMapping("/create")
     public ResponseEntity<UserEventStatusDTO> createUserEventStatus(@Valid @RequestBody UserEventStatusDTO userEventStatusDTO, HttpServletRequest httpServletRequest) {
-        UserEventStatusDTO cratedUserEventStatus = userEventStatusService.createUserEventStatus(userEventStatusDTO, (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
+        PublicUserDTO currentUser = (PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey);
+
+        if (currentUser == null) {
+            throw new AccessDeniedException();
+        }
+
+        UserEventStatusDTO cratedUserEventStatus = userEventStatusService.createUserEventStatus(userEventStatusDTO, currentUser);
         return new ResponseEntity<>(cratedUserEventStatus, HttpStatus.CREATED);
     }
 
