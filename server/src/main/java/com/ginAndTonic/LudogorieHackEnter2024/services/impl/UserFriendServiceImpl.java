@@ -12,6 +12,7 @@ import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserFriend;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserFriendRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.UserFriendService;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,12 @@ public class UserFriendServiceImpl implements UserFriendService {
 
     private final UserFriendRepository userFriendRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public UserFriendServiceImpl(UserFriendRepository userFriendRepository, UserRepository userRepository) {
+    public UserFriendServiceImpl(UserFriendRepository userFriendRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.userFriendRepository = userFriendRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -52,15 +55,11 @@ public class UserFriendServiceImpl implements UserFriendService {
         User user = userRepository.findById(loggedUserId).orElseThrow(UserNotFoundException::new);
         User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
 
-        UserFriend userFriend = userFriendRepository.findByUserIdAndFriendId(user.getId(), friend.getId())
+        UserFriend userFriend = userFriendRepository.findByUserIdAndFriendId(friend.getId(), user.getId())
                 .orElseThrow(UserFriendNotFoundException::new);
 
-        if (userFriend.getFriend().getId() == friend.getId()) {
-            userFriend.setConfirmed(true);
-            userFriendRepository.save(userFriend);
-        } else {
-            throw new CannotConfirmFriendshipException();
-        }
+        userFriend.setConfirmed(true);
+        userFriendRepository.save(userFriend);
     }
 
     @Override
@@ -72,8 +71,15 @@ public class UserFriendServiceImpl implements UserFriendService {
     }
 
     @Override
-    public List<UserFriend> getFriendsForUser(PublicUserDTO user) {
-        return userFriendRepository.findByUserIdAndIsConfirmedIsTrue(user.getId());
+    public List<UserFriend> getFriendRequestsById(Long id) {
+       User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+       return userFriendRepository.findByFriendIdAndIsConfirmedIsFalse(user.getId());
+    }
+    @Override
+    public List<UserFriend> getFriendsForUser(Long id) {
+        userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+        return userFriendRepository.findAllByUser_IdAndIsConfirmedTrueOrFriend_IdAndIsConfirmedTrue(id, id);
     }
 
     @Override
@@ -94,5 +100,27 @@ public class UserFriendServiceImpl implements UserFriendService {
         existingFriends.forEach(potentialFriends::remove);
 
         return new ArrayList<>(potentialFriends);
+    }
+    @Override
+    public boolean hasSentFriendRequest(PublicUserDTO loggedUser, Long targetUserId) {
+        userRepository.findById(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(targetUserId).orElseThrow(UserNotFoundException::new);
+
+        Optional<UserFriend> friendship = userFriendRepository.findByUserIdAndFriendId(loggedUser.getId(), targetUserId);
+        Optional<UserFriend> friendRequest = userFriendRepository.findByUserIdAndFriendId(targetUserId, loggedUser.getId());
+
+        return friendship.isPresent() || friendRequest.isPresent();
+    }
+
+    @Override
+    public void deleteFriendship(PublicUserDTO loggedUser, Long userId2) {
+        userRepository.findById(loggedUser.getId()).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(userId2).orElseThrow(UserNotFoundException::new);
+
+        Optional<UserFriend> friendship1 = userFriendRepository.findByUserIdAndFriendId(loggedUser.getId(), userId2);
+        Optional<UserFriend> friendship2 = userFriendRepository.findByUserIdAndFriendId(userId2, loggedUser.getId());
+
+        friendship1.ifPresent(userFriendRepository::delete);
+        friendship2.ifPresent(userFriendRepository::delete);
     }
 }

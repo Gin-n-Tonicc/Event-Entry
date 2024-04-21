@@ -4,7 +4,6 @@ import com.ginAndTonic.LudogorieHackEnter2024.filters.JwtAuthenticationFilter;
 import com.ginAndTonic.LudogorieHackEnter2024.model.dto.auth.PublicUserDTO;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.User;
 import com.ginAndTonic.LudogorieHackEnter2024.model.entity.UserFriend;
-import com.ginAndTonic.LudogorieHackEnter2024.repositories.UserRepository;
 import com.ginAndTonic.LudogorieHackEnter2024.services.UserFriendService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +16,9 @@ import java.util.List;
 public class UserFriendController {
 
     private final UserFriendService userFriendService;
-    private final UserRepository userRepository;
 
-    public UserFriendController(UserFriendService userFriendService, UserRepository userRepository) {
+    public UserFriendController(UserFriendService userFriendService) {
         this.userFriendService = userFriendService;
-        this.userRepository = userRepository;
     }
 
     @PostMapping("/add/{friendId}")
@@ -36,9 +33,15 @@ public class UserFriendController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<UserFriend>> getFriends(HttpServletRequest httpServletRequest) {
-        List<UserFriend> friends = userFriendService.getFriendsForUser((PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<List<UserFriend>> getFriends(@PathVariable Long userId) {
+        List<UserFriend> friends = userFriendService.getFriendsForUser(userId);
+        return ResponseEntity.ok(friends);
+    }
+
+    @GetMapping("/requests/{userId}")
+    public ResponseEntity<List<UserFriend>> getFriendsByUserId(@PathVariable Long userId) {
+        List<UserFriend> friends = userFriendService.getFriendRequestsById(userId);
         return ResponseEntity.ok(friends);
     }
 
@@ -48,9 +51,23 @@ public class UserFriendController {
         userFriendService.confirmFriendRequest(loggedUser.getId(), friendId);
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/suggest")
     public ResponseEntity<List<User>> suggestFriendsBySkills(HttpServletRequest httpServletRequest) {
         List<User> friends = userFriendService.suggestFriendsBySkills((PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey));
         return ResponseEntity.ok(friends);
+    }
+
+    @GetMapping("/has-sent-request/{targetUserId}")
+    public ResponseEntity<Boolean> hasSentFriendRequest(@PathVariable Long targetUserId, HttpServletRequest httpServletRequest) {
+        boolean hasSentRequest = userFriendService.hasSentFriendRequest((PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey), targetUserId);
+
+        return ResponseEntity.ok(hasSentRequest);
+    }
+    @DeleteMapping("/{friendId}")
+    public ResponseEntity<Void> deleteFriendship(@PathVariable Long friendId, HttpServletRequest httpServletRequest) {
+        userFriendService.deleteFriendship((PublicUserDTO) httpServletRequest.getAttribute(JwtAuthenticationFilter.userKey), friendId);
+
+        return ResponseEntity.noContent().build();
     }
 }

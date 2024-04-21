@@ -1,0 +1,95 @@
+.custom-chatter .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-chatter .main {
+  background-color: #eee;
+  width: 50vw;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 6px 0px 0px 0px;
+  padding: 5rem;
+}
+
+.custom-chatter .scroll {
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  height: 100%;
+  max-height: 70vh;
+}
+
+.custom-chatter .img1 {
+  border-radius: 50%;
+  background-color: #66bb6a;
+}
+
+.custom-chatter .name {
+  font-size: 12px;
+}
+
+.custom-chatter .msg {
+  background-color: #fff;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #3e3c3c;
+}
+
+.custom-chatter .between {
+  font-size: 8px;
+  font-weight: 500;
+  color: #a09e9e;
+}
+
+.custom-chatter .navbar {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.custom-chatter .form-control {
+  font-size: 10px;
+  font-weight: 400;
+  width: 230px;
+  height: 30px;
+  border: none;
+}
+
+.custom-chatter .form-control:focus {
+  box-shadow: none;
+  overflow: hidden;
+  border: none;
+}
+
+.custom-chatter .form-control:focus {
+  box-shadow: none !important;
+}
+
+.custom-chatter .icon1 {
+  /* color: #7c4dff !important; */
+  font-size: 18px !important;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.custom-chatter .icon2 {
+  /* color: #512da8 !important; */
+  font-size: 18px !important;
+  position: relative;
+  padding: 0px;
+  padding-right: 0.5rem;
+  cursor: pointer;
+}
+
+.custom-chatter .icondiv {
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  padding: 2px;
+  position: relative;
+  bottom: 1px;
+}

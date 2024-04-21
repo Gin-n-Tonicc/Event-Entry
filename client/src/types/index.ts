@@ -15,6 +15,11 @@ export * from './interfaces/common/IObjectWithId';
 export * from './interfaces/auth/IAuthRefreshResponse';
 export * from './interfaces/auth/IAuthResponse';
 export * from './interfaces/auth/IAuthStorage';
+export * from './interfaces/auth/IFullUser';
 export * from './interfaces/auth/IUser';
+// - profile
+export * from './interfaces/profile/IUserFriend';
 // - skills
 export * from './interfaces/skills/ISkill';
+// - chat
+export * from './interfaces/chat/IMessage';

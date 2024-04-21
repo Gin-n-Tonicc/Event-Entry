@@ -198,6 +198,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public AdminUserDTO getById(Long userId) {
+        User user = findById(userId);
+
+        if (user.isDeleted()) {
+            throw new UserNotFoundException("id");
+        }
+
+        return modelMapper.map(user, AdminUserDTO.class);
+    }
+
+    @Override
     public void createVerificationToken(User user, String token) {
         VerificationToken myToken = new VerificationToken(token, user);
         verificationTokenRepository.save(myToken);

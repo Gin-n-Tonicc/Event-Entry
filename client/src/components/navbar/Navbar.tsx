@@ -17,11 +17,16 @@ function AdminNav() {
 function LoggedNav(props: {
   isOrganisation: boolean;
   hasFinishedOAuth2: boolean;
+  userId: number;
 }) {
   return (
     <>
       <NavItem to={PageEnum.Logout} text="Log out" />
-      <NavItem to={PageEnum.Profile} text="Profile" img={profileUserIcon} />
+      <NavItem
+        to={PageEnum.Profile.replace(':userId', props.userId.toString())}
+        text="Profile"
+        img={profileUserIcon}
+      />
     </>
   );
 }
@@ -40,6 +45,7 @@ function UserNav(props: {
   isOrganisation: boolean;
   hasFinishedOAuth2: boolean;
   isAdmin: boolean;
+  userId: number;
 }) {
   return (
     <>
@@ -100,6 +106,7 @@ function Navbar() {
               isOrganisation={isOrganisation}
               hasFinishedOAuth2={hasFinishedOAuth2}
               isAdmin={isAdmin}
+              userId={user.id || -1}
             />
           )}
         </div>
