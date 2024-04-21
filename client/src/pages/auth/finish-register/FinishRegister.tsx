@@ -1,5 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { MultiValue } from 'react-select';
 import { CachePolicies, useFetch } from 'use-http';
 import FormErrorWrapper from '../../../components/form-error-wrapper/FormErrorWrapper';
@@ -7,10 +8,11 @@ import FormInput from '../../../components/form-input/FormInput';
 import SkillsSelect, {
   SkillOption,
 } from '../../../components/skills-select/SkillsSelect';
-import { authPaths, skillsPaths } from '../../../config/api';
+import { OAuthPaths, skillsPaths } from '../../../config/api';
+import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import useValidators from '../../../hooks/useValidator';
-import { AlertTypeEnum, IAuthResponse, ISkill, RoleEnum } from '../../../types';
+import { IAuthResponse, ISkill, PageEnum, RoleEnum } from '../../../types';
 import '../styles/Register.scss';
 
 type Inputs = {
@@ -20,16 +22,15 @@ type Inputs = {
   Education: string;
   Experience: string;
   Address: string;
-  Email: string;
-  Password: string;
-  'Repeat Password': string;
   WICHW: string;
   skillsHave: MultiValue<SkillOption>;
   skillsNeed: MultiValue<SkillOption>;
   role: RoleEnum;
 };
 
-function Register() {
+function FinishRegister() {
+  const navigate = useNavigate();
+  const { user, loginUser } = useAuthContext();
   const { auth } = useValidators();
   const { addError } = useErrorContext();
 
@@ -45,15 +46,12 @@ function Register() {
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
-      'First Name': '',
+      'First Name': user.firstname || '',
       'Last Name': '',
       'Current Workplace': '',
       Education: '',
       Experience: '',
       Address: '',
-      Email: '',
-      Password: '',
-      'Repeat Password': '',
       WICHW: '',
       skillsHave: [],
       skillsNeed: [],
@@ -72,27 +70,9 @@ function Register() {
     []
   );
 
-  const { post, response, loading } = useFetch<IAuthResponse>(
-    authPaths.register
+  const { put, response, loading } = useFetch<IAuthResponse>(
+    OAuthPaths.completeOAuth
   );
-
-  useEffect(() => {
-    const areEqual = formValues.Password === formValues['Repeat Password'];
-    const hasError = Boolean(errors['Repeat Password']);
-    const hasManualError =
-      hasError && errors['Repeat Password']?.type === 'manual';
-
-    if (!hasError && !areEqual) {
-      setError('Repeat Password', {
-        type: 'manual',
-        message: 'Repeat password must match password',
-      });
-    }
-
-    if (hasManualError && areEqual) {
-      clearErrors('Repeat Password');
-    }
-  }, [errors, formValues, setError, clearErrors]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const body = {
@@ -102,26 +82,22 @@ function Register() {
       education: data.Education.trim(),
       workExperience: data.Experience.trim(),
       address: data.Address.trim(),
-      email: data.Email.trim(),
-      password: data.Password.trim(),
+      whatCanHelpWith: data.WICHW.trim(),
       skills: data.skillsHave.map((x) =>
         skills?.find((y) => y.id === Number(x.value))
       ),
       lookingForSkills: data.skillsNeed.map((x) =>
         skills?.find((y) => y.id === Number(x.value))
       ),
-      whatCanHelpWith: data.WICHW.trim(),
       role: data.role,
     };
 
-    await post(body);
+    const res = await put(body);
 
     if (response.ok) {
       reset();
-      addError(
-        'A confirmation email has been sent to the given email address!',
-        AlertTypeEnum.HEADS_UP
-      );
+      loginUser(res);
+      navigate(PageEnum.Home);
     }
   };
 
@@ -159,19 +135,9 @@ function Register() {
         <div className="card border-0 shadow rounded-3 my-5">
           <div className="card-body p-4 p-sm-5">
             <h5 className="card-title text-center mb-5 fw-light fs-5">
-              Sign In
+              Finish Register
             </h5>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormInput
-                control={control}
-                type="email"
-                name="Email"
-                inputClasses="form-control"
-                placeholder="name@example.com"
-                labelText="Email Address*"
-                rules={auth.EMAIL_VALIDATIONS}
-              />
-
               <FormInput
                 control={control}
                 type="text"
@@ -210,26 +176,6 @@ function Register() {
                 placeholder="1 SU 'st. Sedmochislenici'"
                 labelText="Education*"
                 rules={auth.EDUCATION_VALIDATIONS}
-              />
-
-              <FormInput
-                control={control}
-                type="password"
-                inputClasses="form-control"
-                name="Password"
-                placeholder="Password"
-                labelText="Password*"
-                rules={auth.PASSWORD_VALIDATIONS}
-              />
-
-              <FormInput
-                control={control}
-                type="password"
-                inputClasses="form-control"
-                name="Repeat Password"
-                placeholder="Repeat Password"
-                labelText="Repeat Password*"
-                rules={auth.REPEAT_PASSWORD_VALIDATIONS}
               />
 
               <FormErrorWrapper message={errors.Experience?.message}>
@@ -314,16 +260,7 @@ function Register() {
                   disabled={loading}
                   className="btn btn-primary btn-login text-uppercase fw-bold"
                   type="submit">
-                  Sign in
-                </button>
-              </div>
-              <hr className="my-4" />
-              <div className="d-grid mb-2">
-                <button
-                  disabled={loading}
-                  className="btn btn-google btn-login text-uppercase fw-bold"
-                  type="submit">
-                  <i className="fab fa-google me-2" /> Sign in with Google
+                  Finish Register
                 </button>
               </div>
             </form>
@@ -334,4 +271,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default FinishRegister;

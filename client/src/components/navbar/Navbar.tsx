@@ -21,12 +21,17 @@ function LoggedNav(props: {
 }) {
   return (
     <>
+      {!props.hasFinishedOAuth2 && (
+        <NavItem to={PageEnum.FinishRegister} text="Finish Register" />
+      )}
       <NavItem to={PageEnum.Logout} text="Log out" />
-      <NavItem
-        to={PageEnum.Profile.replace(':userId', props.userId.toString())}
-        text="Profile"
-        img={profileUserIcon}
-      />
+      {props.hasFinishedOAuth2 && (
+        <NavItem
+          to={PageEnum.Profile.replace(':userId', props.userId.toString())}
+          text="Profile"
+          img={profileUserIcon}
+        />
+      )}
     </>
   );
 }

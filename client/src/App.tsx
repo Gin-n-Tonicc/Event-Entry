@@ -12,6 +12,7 @@ import Admin from './pages/admin/Admin';
 import AdminTableDefault from './pages/admin/admin-tables/AdminTableDefault';
 import AdminTableSkills from './pages/admin/admin-tables/AdminTableSkills';
 import AdminTableUsers from './pages/admin/admin-tables/AdminTableUsers';
+import FinishRegister from './pages/auth/finish-register/FinishRegister';
 import Login from './pages/auth/login/Login';
 import Logout from './pages/auth/logout/Logout';
 import Register from './pages/auth/register/Register';
@@ -56,6 +57,10 @@ function App() {
                   element={
                     <ProtectedRoute role={RoleEnum.USER} onlyAuth={true} />
                   }>
+                  <Route
+                    path={PageEnum.FinishRegister}
+                    element={<FinishRegister />}
+                  />
                   <Route path={PageEnum.Chat} element={<Chat />} />
                   <Route path={PageEnum.Logout} element={<Logout />} />
                   <Route path={PageEnum.Profile} element={<Profile />} />
