@@ -29,9 +29,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDTO> getMessagesBetweenUsers(User sender, User receiver) {
-        List<Message> messages = messagesRepository.findMessagesBetweenUsers(sender, receiver);
-        return messages.stream().map(event -> modelMapper.map(event, MessageDTO.class)).toList();
+    public List<Message> getMessagesBetweenUsers(User sender, User receiver) {
+        return messagesRepository.findMessagesBetweenUsers(sender, receiver);
     }
 
     @Override
