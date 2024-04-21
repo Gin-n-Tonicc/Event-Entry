@@ -2,6 +2,8 @@ export * from './admin';
 export * from './auth';
 export * from './events';
 export * from './files';
+export * from './friends';
+export * from './messages';
 export * from './oAuth';
 export * from './skills';
 export * from './userEventStatuses';

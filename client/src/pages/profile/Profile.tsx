@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useFetch } from 'use-http';
 import Spinner from '../../components/spinner/Spinner';
 import { usersPaths } from '../../config/api';
 import { friendsPaths } from '../../config/api/friends';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { IFullUser, IUserFriend } from '../../types';
+import { IFullUser, IUserFriend, PageEnum } from '../../types';
 import './Profile.scss';
 import ProfileFriendRequests from './profile-friend-requests/ProfileFriendRequests';
 import ProfileFriends from './profile-friends/ProfileFriends';
@@ -109,7 +109,12 @@ function Profile() {
                         Add Friend
                       </button>
                     )}
-                    <button className="btn btn-outline-primary">Message</button>
+                    <Link
+                      to={PageEnum.Chat.replace(':userId', user.id.toString())}>
+                      <button className="btn btn-outline-primary">
+                        Message
+                      </button>
+                    </Link>
                   </div>
                 )}
               </div>

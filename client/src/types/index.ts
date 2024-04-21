@@ -21,3 +21,5 @@ export * from './interfaces/auth/IUser';
 export * from './interfaces/profile/IUserFriend';
 // - skills
 export * from './interfaces/skills/ISkill';
+// - chat
+export * from './interfaces/chat/IMessage';

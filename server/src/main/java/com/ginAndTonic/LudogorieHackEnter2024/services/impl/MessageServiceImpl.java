@@ -41,9 +41,7 @@ public class MessageServiceImpl implements MessageService {
         message.setSentAt(LocalDateTime.now());
 
         Message savedMessage = modelMapper.map(message, Message.class);
-        messagesRepository.save(savedMessage);
-
-        return savedMessage;
+        return messagesRepository.save(savedMessage);
     }
 }
 

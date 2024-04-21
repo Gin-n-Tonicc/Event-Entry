@@ -10,5 +10,5 @@ export enum PageEnum {
   Logout = '/logout',
   Profile = '/profile/:userId',
   Admin = '/admin',
-  Chat = '/chat',
+  Chat = '/chat/:userId',
 }
