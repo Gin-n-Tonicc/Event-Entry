@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useFetch } from 'use-http';
 import Spinner from '../../components/spinner/Spinner';
@@ -15,7 +14,6 @@ import ProfileFriends from './profile-friends/ProfileFriends';
 function Profile() {
   const { userId: idParam } = useParams();
   const { user: userMe } = useAuthContext();
-  const [editing, setEditing] = useState(false);
 
   const userId = Number(idParam || -1);
 
@@ -42,10 +40,6 @@ function Profile() {
 
   const refreshFriends = async () => {
     await getFriends();
-  };
-
-  const handleToggleEdit = () => {
-    setEditing((prev) => !prev);
   };
 
   const handleAddFriend = async () => {
@@ -153,15 +147,7 @@ function Profile() {
                 <h6 className="mb-0">First Name</h6>
               </div>
               <div className="col-sm-9 text-secondary">
-                {editing ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    defaultValue={user.firstname}
-                  />
-                ) : (
-                  <p>{user.firstname}</p>
-                )}
+                <p>{user.firstname}</p>
               </div>
             </div>
             <div className="row mb-3">
@@ -169,15 +155,7 @@ function Profile() {
                 <h6 className="mb-0">Last Name</h6>
               </div>
               <div className="col-sm-9 text-secondary">
-                {editing ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    defaultValue={user.lastname}
-                  />
-                ) : (
-                  <p>{user.lastname}</p>
-                )}
+                <p>{user.lastname}</p>
               </div>
             </div>
             <div className="row mb-3">
@@ -185,15 +163,7 @@ function Profile() {
                 <h6 className="mb-0">Address</h6>
               </div>
               <div className="col-sm-9 text-secondary">
-                {editing ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    defaultValue={user.address}
-                  />
-                ) : (
-                  <p>{user.address}</p>
-                )}
+                <p>{user.address}</p>
               </div>
             </div>
             <div className="row mb-3">
@@ -201,15 +171,7 @@ function Profile() {
                 <h6 className="mb-0">Education</h6>
               </div>
               <div className="col-sm-9 text-secondary">
-                {editing ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    defaultValue={user.education}
-                  />
-                ) : (
-                  <p>{user.education}</p>
-                )}
+                <p>{user.education}</p>
               </div>
             </div>
             <div className="row mb-3">
@@ -217,15 +179,7 @@ function Profile() {
                 <h6 className="mb-0">Workplace</h6>
               </div>
               <div className="col-sm-9 text-secondary">
-                {editing ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    defaultValue={user.currentWorkPlace}
-                  />
-                ) : (
-                  <p>{user.currentWorkPlace}</p>
-                )}
+                <p>{user.currentWorkPlace}</p>
               </div>
             </div>
             <div className="row mb-3">
@@ -233,15 +187,7 @@ function Profile() {
                 <h6 className="mb-0">Work Experience</h6>
               </div>
               <div className="col-sm-9 text-secondary">
-                {editing ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    defaultValue={user.workExperience}
-                  />
-                ) : (
-                  <p>{user.workExperience}</p>
-                )}
+                <p>{user.workExperience}</p>
               </div>
             </div>
             <div className="row mb-3">
@@ -249,15 +195,7 @@ function Profile() {
                 <h6 className="mb-0">What I can help with</h6>
               </div>
               <div className="col-sm-9 text-secondary">
-                {editing ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    defaultValue={user.whatCanHelpWith}
-                  />
-                ) : (
-                  <p>{user.whatCanHelpWith}</p>
-                )}
+                <p>{user.whatCanHelpWith}</p>
               </div>
             </div>
             <div className="row mb-3">
@@ -271,33 +209,7 @@ function Profile() {
 
             <div className="row">
               <div className="col-sm-3" />
-              <div className="col-sm-9 text-secondary">
-                {!isOwner ? null : editing ? (
-                  <input
-                    type="button"
-                    className="btn btn-primary px-4"
-                    value="Stop Editing"
-                    onClick={handleToggleEdit}
-                  />
-                ) : (
-                  <input
-                    type="button"
-                    className="btn btn-primary px-4"
-                    value="Edit"
-                    onClick={handleToggleEdit}
-                  />
-                )}
-
-                <span> </span>
-
-                {editing && (
-                  <input
-                    type="button"
-                    className="btn btn-primary px-4"
-                    value="Save Changes"
-                  />
-                )}
-              </div>
+              <div className="col-sm-9 text-secondary"></div>
             </div>
           </div>
         </div>
