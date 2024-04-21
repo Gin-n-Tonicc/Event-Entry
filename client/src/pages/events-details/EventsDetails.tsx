@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useFetch } from 'use-http';
 import {
   eventsPaths,
@@ -7,14 +7,12 @@ import {
   userEventStatusesPaths,
 } from '../../config/api';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { PageEnum } from '../../types/enums/PageEnum';
 import { IUser } from '../../types/interfaces/auth/IUser';
 import { IEvent } from '../../types/interfaces/events/IEvent';
 
-const CHARACTER_DESCRIPTION_THRESHOLD = 60;
-
 function EventsDetails() {
   const { id } = useParams();
-  const [reduced1, setReduced] = useState<string[]>([]);
   const { user } = useAuthContext();
   const [participatingUsers, setParticipatingUsers] = useState<IUser[]>([]);
 
@@ -41,45 +39,6 @@ function EventsDetails() {
     setParticipatingUsers(participatingUsersFetch);
   }, [participatingUsersFetch]);
 
-  useEffect(() => {
-    if (!event) {
-      return;
-    }
-
-    const separator = event.description.includes(' ') ? ' ' : '';
-    const descWords = event.description.split(separator);
-
-    const reduced = descWords.reduce<{
-      count: number;
-      previousIndex: number;
-      newArr: string[];
-    }>(
-      (acc, x, i, arr) => {
-        acc.count += x.length;
-
-        if (acc.count > CHARACTER_DESCRIPTION_THRESHOLD) {
-          const wordsMatchThreshold = arr
-            .slice(acc.previousIndex, i)
-            .join(separator);
-          acc.previousIndex = i;
-          acc.newArr.push(wordsMatchThreshold);
-          acc.count = 0;
-        }
-
-        return acc;
-      },
-      { count: 0, previousIndex: 0, newArr: [] }
-    );
-
-    reduced.newArr.push(
-      descWords
-        .slice(reduced.previousIndex, descWords.length - 1)
-        .join(separator)
-    );
-
-    setReduced(reduced.newArr);
-  }, [event]);
-
   const handleParticipation = async () => {
     const body = {
       id: 0,
@@ -92,8 +51,6 @@ function EventsDetails() {
       setParticipatingUsers((prev) => [...prev, user as IUser]);
     }
   };
-
-  console.log(participatingUsers);
 
   const participating = useMemo(
     () => participatingUsers.some((x) => x.id === user.id),
@@ -151,7 +108,7 @@ function EventsDetails() {
                 </div>
                 <div className="d-flex flex-column align-items-center justify-content-center gap-3 mb-3">
                   <h4>Event description</h4>
-                  <p style={{ textAlign: 'center' }}>{reduced1.join('\n')}</p>
+                  <p style={{ textAlign: 'center' }}>{event?.description}</p>
                   <div style={{ width: '60%' }}>
                     <button
                       className="btn btn-primary w-100"
@@ -163,6 +120,52 @@ function EventsDetails() {
                         ? 'Mark as participating'
                         : 'Successfully marked as participating'}
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="col-sm-12 ps-0 wow slideInUp"
+              style={{
+                maxWidth: '150%',
+                maxHeight: '60vh',
+                overflowY: 'scroll',
+              }}>
+              <div>
+                <div className="card-body">
+                  <h5 className="d-flex align-items-center mb-3">
+                    People Participating
+                  </h5>
+                  <div>
+                    <div className="card d-flex row">
+                      {participatingUsers.map((x) => (
+                        <div
+                          className="p-4 d-flex align-items-center gap-3"
+                          key={x.id}>
+                          <img
+                            src="https://bootdey.com/img/Content/avatar/avatar2.png"
+                            alt=""
+                            className="rounded-circle"
+                            width="40"
+                            height="40"
+                          />
+                          <div>
+                            <Link
+                              to={PageEnum.Profile.replace(
+                                ':userId',
+                                x.id.toString()
+                              )}
+                              className="fw-semibold mb-0">
+                              <h5>{x.firstname}</h5>
+                            </Link>
+                            <span className="fs-7 d-flex align-items-center">
+                              <i className="ti ti-map-pin text-dark fs-3 me-1"></i>
+                              {x.whatCanHelpWith}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -198,8 +201,12 @@ function EventsDetails() {
                 <p className="m-0">
                   What can we help with? {user.whatCanHelpWith}
                 </p>
+                <p className="m-0 text-blue te text-decoration-underline">
+                  Connect with us through our profile page!
+                </p>
               </div>
             </div>
+            <div></div>
           </div>
         </div>
       </div>

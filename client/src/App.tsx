@@ -10,6 +10,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ErrorProvider } from './contexts/ErrorContext';
 import Admin from './pages/admin/Admin';
 import AdminTableDefault from './pages/admin/admin-tables/AdminTableDefault';
+import AdminTableEvents from './pages/admin/admin-tables/AdminTableEvents';
 import AdminTableSkills from './pages/admin/admin-tables/AdminTableSkills';
 import AdminTableUsers from './pages/admin/admin-tables/AdminTableUsers';
 import FinishRegister from './pages/auth/finish-register/FinishRegister';
@@ -98,7 +99,10 @@ function App() {
                     path={AdminPageEnum.SKILLS}
                     element={<AdminTableSkills />}
                   />
-
+                  <Route
+                    path={AdminPageEnum.EVENTS}
+                    element={<AdminTableEvents />}
+                  />
                   <Route
                     path="*"
                     element={<Navigate to={PageEnum.NotFound} />}

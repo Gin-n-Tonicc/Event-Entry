@@ -1,6 +1,7 @@
 package com.ginAndTonic.LudogorieHackEnter2024.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ginAndTonic.LudogorieHackEnter2024.enums.Role;
 import com.ginAndTonic.LudogorieHackEnter2024.exceptions.handlers.JwtAuthenticationEntryPoint;
 import com.ginAndTonic.LudogorieHackEnter2024.filters.JwtAuthenticationFilter;
 import com.ginAndTonic.LudogorieHackEnter2024.security.OAuth2LoginSuccessHandler;
@@ -70,10 +71,10 @@ public class SecurityConfiguration {
                         "/swagger-ui.html",
                         "/oauth/**",
                         "/api/v1/skills/all",
-                        "/api/v1/messages/**"
+                        "/api/v1/messages/**",
+                        "/api/v1/userEventStatuses/**"
                 )
                 .permitAll()
-
                 .anyRequest()
                 .authenticated()
                 .and()
