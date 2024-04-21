@@ -25,8 +25,9 @@ import Home from './pages/home/Home';
 import NotFound from './pages/not-found/NotFound';
 import Profile from './pages/profile/Profile';
 import './scss/styles.scss';
-import { PageEnum, RoleEnum } from './types';
 import { AdminPageEnum } from './types/enums/AdminPageEnum';
+import { PageEnum } from './types/enums/PageEnum';
+import { RoleEnum } from './types/enums/RoleEnum';
 
 function App() {
   return (

@@ -3,7 +3,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { v4 as uuidV4 } from 'uuid';
 import { usePagination } from '../../../hooks/usePagination';
 import { IObjectWithId } from '../../../types/interfaces/common/IObjectWithId';
-import { camelCaseToWords } from '../../../utils';
+import { camelCaseToWords } from '../../../utils/string';
 import AdminEditForm, {
   OnCreateFunction,
   OnUpdateFunction,

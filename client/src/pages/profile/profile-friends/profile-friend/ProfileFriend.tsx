@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useFetch } from 'use-http';
 import { friendsPaths } from '../../../../config/api/friends';
-import { IFullUser, PageEnum } from '../../../../types';
+import { PageEnum } from '../../../../types/enums/PageEnum';
+import { IFullUser } from '../../../../types/interfaces/auth/IFullUser';
 
 interface ProfileFriendProps {
   friend: IFullUser;

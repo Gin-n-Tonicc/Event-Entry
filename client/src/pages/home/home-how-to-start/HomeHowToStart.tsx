@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { PageEnum } from '../../../types/enums/PageEnum';
 import about1 from './img/about-1.jpg';
 import about2 from './img/about-2.jpg';
 import about3 from './img/about-3.jpg';
@@ -53,9 +55,11 @@ function HomeHowToStart() {
               <i className="fa fa-check text-primary me-3" />
               Clita duo justo magna dolore erat amet
             </p>
-            <a className="btn btn-primary py-3 px-5 mt-3" href="">
+            <Link
+              to={PageEnum.Events}
+              className="btn btn-primary py-3 px-5 mt-3">
               Read More
-            </a>
+            </Link>
           </div>
         </div>
       </div>

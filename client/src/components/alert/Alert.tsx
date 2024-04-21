@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useErrorContext } from '../../contexts/ErrorContext';
-import { AlertTypeEnum } from '../../types';
+import { AlertTypeEnum } from '../../types/enums/AlertTypeEnum';
 import './Alert.scss';
 
 interface IParentAlertProps {

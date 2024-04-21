@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PageEnum } from '../../../types';
+import { PageEnum } from '../../../types/enums/PageEnum';
 import carousel1 from './img/carousel-1.jpg';
 
 function HomeHero() {

@@ -7,7 +7,7 @@ import {
   userEventStatusesPaths,
 } from '../../config/api';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { IUser } from '../../types';
+import { IUser } from '../../types/interfaces/auth/IUser';
 import { IEvent } from '../../types/interfaces/events/IEvent';
 
 const CHARACTER_DESCRIPTION_THRESHOLD = 60;

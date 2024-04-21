@@ -1,7 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { PageEnum, RoleEnum } from '../../types';
 import { AdminPageEnum } from '../../types/enums/AdminPageEnum';
+import { PageEnum } from '../../types/enums/PageEnum';
+import { RoleEnum } from '../../types/enums/RoleEnum';
 import profileUserIcon from './img/profile-user-icon.png';
 import NavItem from './nav-item/NavItem';
 

@@ -3,8 +3,9 @@ import { CachePolicies, CustomOptions, Provider, useFetch } from 'use-http';
 import { authPaths } from '../../config/api';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
-import { IUser } from '../../types';
-import { initialAuth, isJwtExpired } from '../../utils';
+import { IUser } from '../../types/interfaces/auth/IUser';
+import { initialAuth } from '../../utils/auth';
+import { isJwtExpired } from '../../utils/jwt';
 
 // The component that is responsible for the useFetch hook options
 export default function HttpProvider({ children }: PropsWithChildren) {

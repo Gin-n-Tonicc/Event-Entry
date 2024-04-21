@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useFetch } from 'use-http';
 import { eventsPaths, filesPaths } from '../../../config/api';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { PageEnum } from '../../../types';
+import { PageEnum } from '../../../types/enums/PageEnum';
 import { IEvent } from '../../../types/interfaces/events/IEvent';
 
 export interface EventsItemProps extends IEvent {}
