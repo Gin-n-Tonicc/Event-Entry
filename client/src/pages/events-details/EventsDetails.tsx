@@ -13,7 +13,7 @@ import { IEvent } from '../../types/interfaces/events/IEvent';
 
 function EventsDetails() {
   const { id } = useParams();
-  const { user } = useAuthContext();
+  const { user, isAuthenticated, hasFinishedOAuth2 } = useAuthContext();
   const [participatingUsers, setParticipatingUsers] = useState<IUser[]>([]);
 
   const eventId = Number(id || -1);
@@ -102,7 +102,7 @@ function EventsDetails() {
                     </span>
                     <span className="text-truncate me-0">
                       <i className="fas fa-user text-primary me-2" />
-                      People Going: {participatingUsers.length}
+                      People Participating: {participatingUsers.length}
                     </span>
                   </div>
                 </div>
@@ -113,7 +113,11 @@ function EventsDetails() {
                     <button
                       className="btn btn-primary w-100"
                       disabled={
-                        loadingEvent || loadingStatuses || participating
+                        loadingEvent ||
+                        loadingStatuses ||
+                        participating ||
+                        !isAuthenticated ||
+                        !hasFinishedOAuth2
                       }
                       onClick={handleParticipation}>
                       {!participating
@@ -134,7 +138,7 @@ function EventsDetails() {
               <div>
                 <div className="card-body">
                   <h5 className="d-flex align-items-center mb-3">
-                    People Participating
+                    People Participating: {participatingUsers.length}
                   </h5>
                   <div>
                     <div className="card d-flex row">
