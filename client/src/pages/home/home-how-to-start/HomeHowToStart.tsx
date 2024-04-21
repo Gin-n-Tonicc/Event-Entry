@@ -34,7 +34,7 @@ function HomeHowToStart() {
           </div>
           <div className="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
             <h1 className="mb-4">
-              We Help To Get The Best Job And Find A Talent
+              We Help To Get The Best Event And Find A Talent
             </h1>
             <p className="mb-4">
               Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu
