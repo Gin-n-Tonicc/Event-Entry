@@ -1,5 +1,6 @@
-# LudogorieHackEnter-2024
+# EventEntry
 
+#### This project was developed starting from the 19th of April, 6PM to the 21st of April, 1PM.
 #### The project was developed in order to participate in the Ludogorie Hack 2024 programming competition
 
 A platform for creating business contacts
